@@ -20,8 +20,8 @@ namespace FileCrawler
         private string path;
         private CrawlType type;
         private List<FileData> files;
-        private List<string> inaccessibleFiles;
         private List<DirectoryData> directories;
+        private List<string> inaccessibleFiles;
         private List<string> inaccessibleDirectories;
 
         private int fileCount;
@@ -66,6 +66,16 @@ namespace FileCrawler
         public List<DirectoryData> Directories
         {
             get { return directories; }
+        }
+
+        public List<string> InaccessibleFiles
+        {
+            get { return inaccessibleFiles; }
+        }
+
+        public List<string> InaccessibleDirectories
+        {
+            get { return inaccessibleDirectories; }
         }
 
         public int FileCount

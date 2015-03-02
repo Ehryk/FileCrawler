@@ -37,7 +37,7 @@ namespace FileCrawler
             }
 
             CrawlType type = CrawlType.Full;
-            if (args[1] != null)
+            if (args.Length > 1 && !String.IsNullOrWhiteSpace(args[1]))
             {
                 type = (CrawlType)Enum.Parse(typeof(CrawlType), args[1]);
             }
@@ -45,9 +45,41 @@ namespace FileCrawler
             FileCrawler crawler = new FileCrawler(args[0], type);
             crawler.StartCrawl();
 
-            foreach(FileData data in crawler.Files)
+            foreach (FileData data in crawler.Files)
             {
                 Console.WriteLine(String.Format(@"{0} {1} {2:N1} KB", data.Path, data.Extension, data.KB));
+            }
+
+            if (AppSettings.ReportDirectories)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Directories:");
+                foreach (DirectoryData data in crawler.Directories)
+                {
+                    Console.WriteLine(String.Format(@"{0} {1} {2:N1} MB", data.Path, data.FileCount, data.TotalSize.GetMB()));
+                }
+            }
+
+            if (crawler.InaccessibleFiles.Count > 0)
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Inaccessible Files:");
+                foreach (string path in crawler.InaccessibleFiles)
+                {
+                    Console.WriteLine(String.Format(@"{0}", path));
+                }
+            }
+
+            if (crawler.InaccessibleDirectories.Count > 0)
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Inaccessible Directories:");
+                foreach (string path in crawler.InaccessibleDirectories)
+                {
+                    Console.WriteLine(String.Format(@"{0}", path));
+                }
             }
 
             Console.WriteLine();
