@@ -15,11 +15,12 @@ namespace FileCrawler
         private static string leaveConsoleOpen = LoadValue("LeaveConsoleOpen");
         private static string processingTemp = LoadValue("ProcessingTemp");
 
+        private static string compressed_PathTo7zDLL = LoadValue("Compressed_PathTo7z.dll");
         private static string compressed_ReportContainers = LoadValue("Compressed_ReportContainers");
         private static string compressed_Extensions = LoadValue("Compressed_Extensions");
         private static List<string> compressed_Extension_List;
         private static string compressed_ReadContents = LoadValue("Compressed_ReadContents");
-        private static string compressed_ReadContents_Nested = LoadValue("Compressed_ReadContents_Nested");
+        private static string compressed_ReadContents_Recurse = LoadValue("Compressed_ReadContents_Recurse");
 
         private static ConnectionStringSettings connection_Main = LoadConnection("Main");
 
@@ -37,6 +38,11 @@ namespace FileCrawler
             get { return processingTemp; }
         }
 
+        public static string Compressed_PathTo7zDLL
+        {
+            get { return compressed_PathTo7zDLL; }
+        }
+
         public static bool Compressed_ReportContainers
         {
             get { return compressed_ReportContainers.ToBoolean(); }
@@ -47,7 +53,7 @@ namespace FileCrawler
             get 
             {
                 if (compressed_Extension_List == null)
-                    compressed_Extension_List = LoadList(compressed_Extensions);
+                    compressed_Extension_List = LoadList(compressed_Extensions.Replace(".", ""));
 
                 return compressed_Extension_List;
             }
@@ -58,9 +64,9 @@ namespace FileCrawler
             get { return compressed_ReadContents.ToBoolean(); }
         }
 
-        public static bool Compressed_ReadContents_Nested
+        public static bool Compressed_ReadContents_Recurse
         {
-            get { return compressed_ReadContents_Nested.ToBoolean(); }
+            get { return compressed_ReadContents_Recurse.ToBoolean(); }
         }
 
         public static ConnectionStringSettings Connection_Main

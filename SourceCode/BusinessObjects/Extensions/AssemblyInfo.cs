@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -60,5 +61,44 @@ namespace BusinessObjects.Extensions
             }
         }
 
+        public static string Path
+        {
+            get
+            {
+                return Assembly.GetCallingAssembly().Location;
+            }
+        }
+
+        public static string DirectoryName
+        {
+            get
+            {
+                return System.IO.Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+            }
+        }
+
+        public static string FileName
+        {
+            get
+            {
+                return System.IO.Path.GetFileName(Assembly.GetCallingAssembly().Location);
+            }
+        }
+
+        public static string Name
+        {
+            get
+            {
+                return Assembly.GetCallingAssembly().GetName().Name;
+            }
+        }
+
+        public static ProcessorArchitecture Architecture
+        {
+            get
+            {
+                return Assembly.GetCallingAssembly().GetName().ProcessorArchitecture;
+            }
+        }
     }
 }

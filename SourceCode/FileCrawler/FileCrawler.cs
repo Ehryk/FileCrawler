@@ -158,11 +158,9 @@ namespace FileCrawler
                 try
                 {
                     FileData data = new FileData(info);
-                    files.Add(data);
 
-                    fileCount++;
-                    totalSize += data.Size;
-                    UpdateSizes();
+                    ProcessFile(data);
+
                     processed++;
                 }
                 catch (Exception ex)
@@ -210,6 +208,66 @@ namespace FileCrawler
             }
 
             return processed;
+        }
+
+        private bool ProcessFile(FileData data)
+        {
+            data.IsCompressedContainer = Utilities.IsContainer(data);
+
+            if (data.IsCompressedContainer && !data.IsContained)
+            {
+                //Container file, not contained within another container
+                if (AppSettings.Compressed_ReportContainers)
+                {
+                    //Add Container
+                    files.Add(data);
+                    fileCount++;
+                    totalSize += data.Size;
+                    UpdateSizes();
+                }
+
+                if (AppSettings.Compressed_ReadContents)
+                {
+                    List<FileData> contents = Utilities.ReadContainerContents(data.Path, data);
+
+                    foreach (FileData cData in contents)
+                    {
+                        ProcessFile(cData);
+                    }
+                }
+
+            }
+            else if (data.IsCompressedContainer && AppSettings.Compressed_ReadContents_Recurse)
+            {
+                //Container file, nested within another container
+                if (AppSettings.Compressed_ReportContainers)
+                {
+                    //Add Container
+                    files.Add(data);
+                    fileCount++;
+                    totalSize += data.Size;
+                    UpdateSizes();
+                }
+
+                string localCopy = Utilities.ExtractFile(data);
+
+                List<FileData> contents = Utilities.ReadContainerContents(localCopy, data);
+
+                foreach (FileData cData in contents)
+                {
+                    ProcessFile(cData);
+                }
+            }
+            else
+            {
+                //Non Container File or a nested container when not set to recurse
+                files.Add(data);
+                fileCount++;
+                totalSize += data.Size;
+                UpdateSizes();
+            }
+
+            return true;
         }
 
         private bool UpdateSizes()

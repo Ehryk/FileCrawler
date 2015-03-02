@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects;
 using BusinessObjects.Extensions;
+using SevenZip;
 
 namespace FileCrawler
 {
-    static class Utilities
+    public static class Utilities
     {
+        #region File Utilities
+
         public static List<string> EnumerateFileSystemEntries(string path, CrawlType type = CrawlType.Full)
         {
             List<string> results;
@@ -110,5 +114,49 @@ namespace FileCrawler
 
             return processed == entries.Count();
         }
+
+        public static bool IsContainer(FileData data)
+        {
+            string extension = data.Extension.Replace(".", "");
+            return AppSettings.Compressed_Extensions.Any(ext => ext.EqualsIgnoreCase(extension));
+        }
+
+        #endregion
+
+        #region Compressed Containers
+
+        public static List<FileData> ReadContainerContents(string path, FileData container)
+        {
+            List<FileData> contents = new List<FileData>();
+
+            SevenZipExtractor extractor = new SevenZipExtractor(path);
+            foreach (ArchiveFileInfo info in extractor.ArchiveFileData.Where(fd => !fd.IsDirectory))
+            {
+                FileData data = new FileData(info, container);
+                
+                if (AppSettings.Compressed_Extensions.Any(ext => ext.EqualsIgnoreCase(data.Extension)))
+                {
+                    data.IsCompressedContainer = true;
+                }
+
+                contents.Add(data);
+            }
+
+            return contents;
+        }
+
+        public static string ExtractFile(FileData data, string destination = null)
+        {
+            destination = destination ?? AppSettings.ProcessingTemp;
+            string target = Path.Combine(destination, data.Name);
+
+            SevenZipExtractor extractor = new SevenZipExtractor(data.ContainerPath);
+            FileStream fs = File.OpenWrite(target);
+            extractor.ExtractFile(data.ContainedPath, fs);
+
+            return target;
+        }
+
+        #endregion
     }
 }

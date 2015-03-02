@@ -26,6 +26,12 @@ Author:
 Build Requirements:
 ---
  - Visual Studio (Built with Visual Studio 2013)
+ - NuGet (packages should restore)
+   - [SevenZipSharp](https://www.nuget.org/packages/SevenZipSharp/) - Managed wrappers around 7z.dll for extraction
+   - [CommandLineParser](https://www.nuget.org/packages/CommandLineParser/) - Command Line Parsing
+   - [Fody](https://www.nuget.org/packages/Fody/) - .NET Assembly Weaving
+   - [Costura.Fody](https://www.nuget.org/packages/Costura.Fody/) - Making the .exe a standalone executable
+   - [log4net](https://www.nuget.org/packages/log4net/) - Centralized logging
 
 Contact:
 ---

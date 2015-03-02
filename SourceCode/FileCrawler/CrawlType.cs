@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FileCrawler
 {
-    enum CrawlType
+    public enum CrawlType
     {
         Full,
         Recursive,

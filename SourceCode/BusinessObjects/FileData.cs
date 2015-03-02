@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using BusinessObjects.Extensions;
+using SevenZip;
 
 namespace BusinessObjects
 {
@@ -22,7 +23,6 @@ namespace BusinessObjects
 
         public string Directory;
         public string ParentName;
-        public string CompressedContainerName;
         public string Name;
         public string Extension;
         public bool ReadOnly;
@@ -30,6 +30,10 @@ namespace BusinessObjects
 
         public bool IsCompressedContainer;
         public bool IsContained;
+        public string ContainerPath;
+        public string ContainerName;
+        public string ContainedDirectory;
+        public string ContainedPath;
 
         public long Size;
         public double KB;
@@ -76,16 +80,68 @@ namespace BusinessObjects
             {
                 CreateTime = info.CreationTime;
                 CreateTimeUtc = info.CreationTimeUtc;
-            } catch { }
+            }
+            catch { }
             try
             {
                 LastAccessTime = info.LastAccessTime;
                 LastAccessTimeUtc = info.LastAccessTimeUtc;
-            } catch { }
+            }
+            catch { }
             try
             {
                 LastWriteTime = info.LastWriteTime;
                 LastWriteTimeUtc = info.LastWriteTimeUtc;
+            }
+            catch { }
+        }
+
+        public FileData(ArchiveFileInfo info, FileData container)
+        {
+            Path = String.Format(@"{0}/{1}", container.Path, info.FileName.Replace("\\", "/"));
+
+            Root = System.IO.Path.GetPathRoot(Path);
+            //Are there other ways a non-UNC path can be non-local?
+            IsNetwork = new Uri(Path).IsUnc;
+            IsLocal = !IsNetwork;
+
+            Directory = container.Directory;
+            ParentName = container.ParentName;
+
+            IsContained = true;
+            ContainerPath = container.Path;
+            ContainerName = container.Name;
+            ContainedDirectory = System.IO.Path.GetDirectoryName(info.FileName);
+            ContainedPath = info.FileName.Replace("\\", "/");
+            ReadOnly = container.ReadOnly;
+
+            Name = System.IO.Path.GetFileName(info.FileName);
+            Extension = System.IO.Path.GetExtension(info.FileName);
+
+            Size = (long)info.Size;
+            KB = Size.GetKB();
+            MB = Size.GetMB();
+            GB = Size.GetGB();
+
+            //How can FileAttributes be retrived from uint?
+            FileAttributes Attributes = (FileAttributes)info.Attributes;
+
+            try
+            {
+                CreateTime = info.CreationTime;
+                CreateTimeUtc = info.CreationTime.ToUniversalTime();
+            }
+            catch { }
+            try
+            {
+                LastAccessTime = info.LastAccessTime;
+                LastAccessTimeUtc = info.LastAccessTime.ToUniversalTime();
+            }
+            catch { }
+            try
+            {
+                LastWriteTime = info.LastWriteTime;
+                LastWriteTimeUtc = info.LastWriteTime.ToUniversalTime();
             }
             catch { }
         }

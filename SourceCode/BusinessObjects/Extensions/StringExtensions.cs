@@ -21,6 +21,11 @@ namespace BusinessObjects.Extensions
             return source.IndexOf(toCheck, StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
+        public static bool EqualsIgnoreCase(this string source, string toCheck)
+        {
+            return source.Equals(toCheck, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static int ToInt(this string s)
         {
             return ToNullableInt(s) ?? -1;
