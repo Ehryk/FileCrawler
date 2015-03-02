@@ -36,7 +36,13 @@ namespace FileCrawler
                 ConfigurationManager.AppSettings["7zLocation"] = sevenZipLocation; 
             }
 
-            FileCrawler crawler = new FileCrawler(@"C:\Projects\FileCrawler\Sample", CrawlType.Full);
+            CrawlType type = CrawlType.Full;
+            if (args[1] != null)
+            {
+                type = (CrawlType)Enum.Parse(typeof(CrawlType), args[1]);
+            }
+
+            FileCrawler crawler = new FileCrawler(args[0], type);
             crawler.StartCrawl();
 
             foreach(FileData data in crawler.Files)

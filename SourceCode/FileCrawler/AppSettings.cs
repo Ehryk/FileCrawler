@@ -14,6 +14,7 @@ namespace FileCrawler
 
         private static string leaveConsoleOpen = LoadValue("LeaveConsoleOpen");
         private static string processingTemp = LoadValue("ProcessingTemp");
+        private static string reportDirectories = LoadValue("ReportDirectories");
 
         private static string compressed_PathTo7zDLL = LoadValue("Compressed_PathTo7z.dll");
         private static string compressed_ReportContainers = LoadValue("Compressed_ReportContainers");
@@ -36,6 +37,11 @@ namespace FileCrawler
         public static string ProcessingTemp
         {
             get { return processingTemp; }
+        }
+
+        public static bool ReportDirectories
+        {
+            get { return reportDirectories.ToBoolean(); }
         }
 
         public static string Compressed_PathTo7zDLL

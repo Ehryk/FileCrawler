@@ -22,7 +22,6 @@ namespace BusinessObjects
 
         public string Name;
         public string ParentName;
-        public string Extension;
         public bool ReadOnly;
         FileAttributes Attributes;
 
@@ -33,9 +32,26 @@ namespace BusinessObjects
         public DateTime? LastWriteTime;
         public DateTime? LastWriteTimeUtc;
 
+        public int FileCount;
+        public long TotalSize;
+
         #endregion
 
         #region Constructors
+
+        public DirectoryData(string path)
+        {
+            Path = path;
+
+            Root = System.IO.Path.GetPathRoot(Path);
+            //Are there other ways a non-UNC path can be non-local?
+            IsNetwork = new Uri(Path).IsUnc;
+            IsLocal = !IsNetwork;
+
+            string withTrailing = path.TrimEnd('\\') + "\\";
+            Name = System.IO.Path.GetDirectoryName(withTrailing);
+            ParentName = System.IO.Path.GetDirectoryName(Name);
+        }
 
         public DirectoryData(DirectoryInfo info)
         {
@@ -51,7 +67,6 @@ namespace BusinessObjects
 
             Name = info.Name;
             ParentName = info.Parent.Name;
-            Extension = info.Extension;
 
             FileAttributes Attributes = info.Attributes;
 
@@ -69,8 +84,7 @@ namespace BusinessObjects
             {
                 LastWriteTime = info.LastWriteTime;
                 LastWriteTimeUtc = info.LastWriteTimeUtc;
-            }
-            catch { }
+            } catch { }
         }
 
         public DirectoryData(DataRow row)

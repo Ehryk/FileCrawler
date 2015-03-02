@@ -35,6 +35,8 @@ namespace FileCrawler
 
         #region Public Properties
 
+        private DirectoryData RootDirectory;
+
         public bool CrawlComplete
         {
             get { return crawlComplete; }
@@ -124,7 +126,8 @@ namespace FileCrawler
 
             try
             {
-                ProcessDirectory(path, ref retCode, type);
+                RootDirectory = new DirectoryData(path);
+                ProcessDirectory(RootDirectory, ref retCode, type);
                 success = true;
             }
             catch (Exception ex)
@@ -141,11 +144,11 @@ namespace FileCrawler
 
         #region Private Methods
 
-        private int ProcessDirectory(string pPath, ref int pRetCode, CrawlType? pType = null, bool pLoadSubdirectories = true, bool pIsSubdirectory = false)
+        private int ProcessDirectory(DirectoryData pDirectory, ref int pRetCode, CrawlType? pType = null, bool pLoadSubdirectories = true, bool pIsSubdirectory = false)
         {
             CrawlType type = pType ?? Type;
 
-            DirectoryInfo directory = new DirectoryInfo(pPath);
+            DirectoryInfo directory = new DirectoryInfo(pDirectory.Path);
             if (!directory.Exists)
                 throw new DirectoryNotFoundException(String.Format("{0} {1} not found.", pIsSubdirectory ? "Subdirectory" : "Directory", directory.FullName));
 
@@ -159,7 +162,7 @@ namespace FileCrawler
                 {
                     FileData data = new FileData(info);
 
-                    ProcessFile(data);
+                    ProcessFile(data, ref pDirectory);
 
                     processed++;
                 }
@@ -170,7 +173,7 @@ namespace FileCrawler
             }
 
             //Subdirectory Processing is Optional for these crawl types; specify with pLoadSubdirectories
-            if (pLoadSubdirectories && (type == CrawlType.Full || type == CrawlType.Shallow))
+            if ((type == CrawlType.Full || type == CrawlType.Shallow) && (pLoadSubdirectories || AppSettings.ReportDirectories))
             {
                 List<DirectoryInfo> directoriesToProcess = Utilities.GetDirectoriesToProcess(directory, type);
                 foreach (DirectoryInfo info in directoriesToProcess)
@@ -197,8 +200,8 @@ namespace FileCrawler
                     try
                     {
                         DirectoryData data = new DirectoryData(info);
+                        processed += ProcessDirectory(data, ref pRetCode, type, pLoadSubdirectories, true);
                         directories.Add(data);
-                        processed += ProcessDirectory(info.FullName, ref pRetCode, type, pLoadSubdirectories, true);
                     }
                     catch (Exception ex)
                     {
@@ -210,7 +213,7 @@ namespace FileCrawler
             return processed;
         }
 
-        private bool ProcessFile(FileData data)
+        private bool ProcessFile(FileData data, ref DirectoryData directory)
         {
             data.IsCompressedContainer = Utilities.IsContainer(data);
 
@@ -232,10 +235,9 @@ namespace FileCrawler
 
                     foreach (FileData cData in contents)
                     {
-                        ProcessFile(cData);
+                        ProcessFile(cData, ref directory);
                     }
                 }
-
             }
             else if (data.IsCompressedContainer && AppSettings.Compressed_ReadContents_Recurse)
             {
@@ -255,7 +257,7 @@ namespace FileCrawler
 
                 foreach (FileData cData in contents)
                 {
-                    ProcessFile(cData);
+                    ProcessFile(cData, ref directory);
                 }
             }
             else
@@ -267,6 +269,8 @@ namespace FileCrawler
                 UpdateSizes();
             }
 
+            directory.FileCount++;
+            directory.TotalSize += data.Size;
             return true;
         }
 
