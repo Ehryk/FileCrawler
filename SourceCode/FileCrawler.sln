@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCrawler", "FileCrawler\FileCrawler.csproj", "{A8C1554C-E53A-458E-9E9D-33DF62C304F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObjects", "ClassLibrary1\BusinessObjects.csproj", "{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObjects", "BusinessObjects\BusinessObjects.csproj", "{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
