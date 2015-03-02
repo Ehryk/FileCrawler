@@ -24,6 +24,13 @@ namespace FileCrawler
         private List<DirectoryData> directories;
         private List<string> inaccessibleDirectories;
 
+        private int fileCount;
+        private int directoryCount;
+        private long totalSize;
+        private double totalSizeKB;
+        private double totalSizeMB;
+        private double totalSizeGB;
+
         #endregion
 
         #region Public Properties
@@ -57,6 +64,36 @@ namespace FileCrawler
         public List<DirectoryData> Directories
         {
             get { return directories; }
+        }
+
+        public int FileCount
+        {
+            get { return fileCount; }
+        }
+
+        public int DirectoryCount
+        {
+            get { return directoryCount; }
+        }
+
+        public long TotalSize
+        {
+            get { return totalSize; }
+        }
+
+        public double TotalSizeKB
+        {
+            get { return totalSizeKB; }
+        }
+
+        public double TotalSizeMB
+        {
+            get { return totalSizeMB; }
+        }
+
+        public double TotalSizeGB
+        {
+            get { return totalSizeGB; }
         }
 
         #endregion
@@ -113,8 +150,7 @@ namespace FileCrawler
                 throw new DirectoryNotFoundException(String.Format("{0} {1} not found.", pIsSubdirectory ? "Subdirectory" : "Directory", directory.FullName));
 
             List<FileInfo> filesToProcess = Utilities.GetFilesToProcess(directory, type, pIsSubdirectory);
-
-            int fileCount = filesToProcess.Count();
+            
             int processed = 0;
 
             foreach (FileInfo info in filesToProcess)
@@ -123,6 +159,10 @@ namespace FileCrawler
                 {
                     FileData data = new FileData(info);
                     files.Add(data);
+
+                    fileCount++;
+                    totalSize += data.Size;
+                    UpdateSizes();
                     processed++;
                 }
                 catch (Exception ex)
@@ -141,6 +181,7 @@ namespace FileCrawler
                     {
                         DirectoryData data = new DirectoryData(info);
                         directories.Add(data);
+                        directoryCount++;
                     }
                     catch (Exception ex)
                     {
@@ -169,6 +210,15 @@ namespace FileCrawler
             }
 
             return processed;
+        }
+
+        private bool UpdateSizes()
+        {
+            totalSizeKB = totalSize.GetKB();
+            totalSizeMB = totalSize.GetMB();
+            totalSizeGB = totalSize.GetGB();
+
+            return true;
         }
 
         #endregion

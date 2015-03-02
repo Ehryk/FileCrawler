@@ -78,6 +78,10 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
+# NuGet Package Manager
+packages
+!packages/repositories.config
+
 # Click-Once directory
 publish
 

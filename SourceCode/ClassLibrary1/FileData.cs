@@ -20,7 +20,8 @@ namespace BusinessObjects
         public bool IsNetwork;
         public bool IsLocal;
 
-        public string DirectoryName;
+        public string Directory;
+        public string ParentName;
         public string CompressedContainerName;
         public string Name;
         public string Extension;
@@ -58,15 +59,16 @@ namespace BusinessObjects
             IsNetwork = new Uri(Path).IsUnc;
             IsLocal = !IsNetwork;
 
-            DirectoryName = info.DirectoryName;
+            Directory = info.DirectoryName;
+            ParentName = info.Directory.Parent.Name;
             Name = info.Name;
             Extension = info.Extension;
             ReadOnly = info.IsReadOnly;
 
             Size = info.Length;
-            KB = GetKB();
-            MB = GetMB();
-            GB = GetGB();
+            KB = Size.GetKB();
+            MB = Size.GetMB();
+            GB = Size.GetGB();
 
             FileAttributes Attributes = info.Attributes;
 
@@ -97,21 +99,6 @@ namespace BusinessObjects
         #endregion
 
         #region Methods
-
-        public double GetKB()
-        {
-            return ((double)Size) / 1024;
-        }
-
-        public double GetMB()
-        {
-            return ((double)Size) / 1024 / 1024;
-        }
-
-        public double GetGB()
-        {
-            return ((double)Size) / 1024 / 1024 / 1024;
-        }
         
         #endregion
     }
