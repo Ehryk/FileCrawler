@@ -30,10 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="SevenZipSharp">
       <HintPath>..\packages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,12 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Extensions\AssemblyInfo.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\FileExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogResult.cs" />
     <Compile Include="Objects\DirectoryData.cs" />
     <Compile Include="Objects\FileData.cs" />
     <Compile Include="Enums\CrawlType.cs" />
@@ -56,9 +64,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logging\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Common.Extensions
 {
@@ -36,14 +37,14 @@ namespace Common.Extensions
             return int.TryParse(s, out i) ? i : (int?)null;
         }
 
-        public static decimal ToDecimal(this string o)
+        public static decimal ToDecimal(this string s)
         {
-            return ToNullableDecimal(o) ?? 0;
+            return ToNullableDecimal(s) ?? 0;
         }
-        public static decimal? ToNullableDecimal(this string o)
+        public static decimal? ToNullableDecimal(this string s)
         {
             decimal d;
-            return Decimal.TryParse(o, out d) ? d : (decimal?)null;
+            return Decimal.TryParse(s, out d) ? d : (decimal?)null;
         }
 
         public static DateTime ToDateTime(this string s)
@@ -56,14 +57,21 @@ namespace Common.Extensions
             return DateTime.TryParse(s, out d) ? d : (DateTime?)null;
         }
 
-        public static bool ToBoolean(this string o)
+        public static bool ToBoolean(this string s)
         {
-            return ToNullableBoolean(o) ?? false;
+            return ToNullableBoolean(s) ?? false;
         }
-        public static bool? ToNullableBoolean(this string o)
+        public static bool? ToNullableBoolean(this string s)
         {
             bool b;
-            return Boolean.TryParse(o, out b) ? b : (bool?)null;
+            return Boolean.TryParse(s, out b) ? b : (bool?)null;
+        }
+
+        public static XmlElement ToXmlElement(this string s)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(s);
+            return document.DocumentElement;
         }
     }
 }
