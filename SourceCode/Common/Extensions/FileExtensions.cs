@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObjects.Extensions
+namespace Common.Extensions
 {
     public static class FileExtensions
     {

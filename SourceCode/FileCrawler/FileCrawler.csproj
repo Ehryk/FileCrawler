@@ -67,9 +67,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{c087edc1-92eb-46c6-abc7-745cf3ccab0d}</Project>
-      <Name>BusinessObjects</Name>
+      <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

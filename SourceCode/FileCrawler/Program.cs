@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-using BusinessObjects;
-using BusinessObjects.Extensions;
+using Common;
+using Common.Extensions;
 using SevenZip;
 
 namespace FileCrawler

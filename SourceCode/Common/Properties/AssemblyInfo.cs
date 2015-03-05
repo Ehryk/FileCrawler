@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BusinessObjects")]
+[assembly: AssemblyTitle("Common")]
 [assembly: AssemblyDescription("Shared Objects")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eric Menze")]

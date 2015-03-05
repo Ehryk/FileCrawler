@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using BusinessObjects.Extensions;
+using Common.Extensions;
 using SevenZip;
 
-namespace BusinessObjects
+namespace Common
 {
     public class FileData
     {

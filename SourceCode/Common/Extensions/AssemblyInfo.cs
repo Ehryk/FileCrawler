@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace BusinessObjects.Extensions
+namespace Common.Extensions
 {
     static public class AssemblyInfo
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BusinessObjects</RootNamespace>
-    <AssemblyName>BusinessObjects</AssemblyName>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,12 +48,16 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="DirectoryData.cs" />
-    <Compile Include="FileData.cs" />
+    <Compile Include="Objects\DirectoryData.cs" />
+    <Compile Include="Objects\FileData.cs" />
+    <Compile Include="Enums\CrawlType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logging\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

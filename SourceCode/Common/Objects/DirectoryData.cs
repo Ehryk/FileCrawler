@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using BusinessObjects.Extensions;
+using Common.Extensions;
 
-namespace BusinessObjects
+namespace Common
 {
     public class DirectoryData
     {

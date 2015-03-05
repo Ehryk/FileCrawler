@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObjects.Extensions
+namespace Common.Enums
 {
-    public static class DateExtensions
+    public enum CrawlType
     {
+        Full,
+        Recursive,
+        Shallow,
+        RecurseSubdirectories
     }
 }
