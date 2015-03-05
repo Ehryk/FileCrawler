@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Common.Extensions;
+using Common.Logging;
 
 namespace FileCrawler
 {
@@ -142,7 +143,7 @@ namespace FileCrawler
             }
             catch (Exception ex)
             {
-                //Log
+                Logger.LogError(ex, "Could not process root directory {0}", RootDirectory.Path);
             }
 
             stopwatch.Stop();
@@ -178,6 +179,7 @@ namespace FileCrawler
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogWarning(ex, "File {0} is inaccessible", info.FullName);
                     inaccessibleFiles.Add(info.FullName);
                 }
             }
@@ -196,6 +198,7 @@ namespace FileCrawler
                     }
                     catch (Exception ex)
                     {
+                        Logger.LogWarning(ex, "Directory {0} is inaccessible", info.FullName);
                         inaccessibleDirectories.Add(info.FullName);
                     }
                 }
@@ -215,6 +218,7 @@ namespace FileCrawler
                     }
                     catch (Exception ex)
                     {
+                        Logger.LogWarning(ex, "Directory {0} is inaccessible", info.FullName);
                         inaccessibleDirectories.Add(info.FullName);
                     }
                 }

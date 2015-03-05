@@ -8,6 +8,7 @@ using System.Configuration;
 using Common;
 using Common.Extensions;
 using SevenZip;
+using Common.Logging;
 
 namespace FileCrawler
 {
@@ -105,6 +106,7 @@ namespace FileCrawler
             }
             catch (Exception ex)
             {
+                Logger.LogWarning(ex, "Could not extract embedded 7z DLLs");
                 return false;
             }
         }
@@ -124,6 +126,7 @@ namespace FileCrawler
             }
             catch (Exception ex)
             {
+                Logger.LogWarning(ex, "Could not extract embedded {0}-bit 7z DLL", Environment.Is64BitOperatingSystem ? 64 : 32);
                 return false;
             }
         }

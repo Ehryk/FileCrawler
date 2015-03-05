@@ -19,9 +19,9 @@ namespace Common.Logging
         private static string connectionString = ConfigurationManager.ConnectionStrings["Logging"] != null ? ConfigurationManager.ConnectionStrings["Logging"].ConnectionString : null;
         private static string logProcedure = ConfigurationManager.AppSettings["DataProcedure_LogInsert"];
 
-        public static LogResult LogFatal(Exception pException, string pMessage = null)
+        public static LogResult LogFatal(Exception pException, string pMessage = null, params object[] pFormatArguments)
         {
-            string message = (pMessage != null) ? String.Format("{0}: {1}", pMessage, pException.Message) : pException.Message;
+            string message = (pMessage != null) ? String.Format("{0}: {1}", String.Format(pMessage, pFormatArguments), pException.Message) : pException.Message;
 
             return LogItem(LogLevel.Fatal, message, pException.StackTrace);
         }
@@ -31,9 +31,9 @@ namespace Common.Logging
             return LogItem(LogLevel.Fatal, String.Format(pMessage, pFormatArguments), pStackTrace);
         }
 
-        public static LogResult LogError(Exception pException, string pMessage = null)
+        public static LogResult LogError(Exception pException, string pMessage = null, params object[] pFormatArguments)
         {
-            string message = (pMessage != null) ? String.Format("{0}: {1}", pMessage, pException.Message) : pException.Message;
+            string message = (pMessage != null) ? String.Format("{0}: {1}", String.Format(pMessage, pFormatArguments), pException.Message) : pException.Message;
 
             return LogItem(LogLevel.Error, message, pException.StackTrace);
         }
@@ -43,9 +43,9 @@ namespace Common.Logging
             return LogItem(LogLevel.Error, String.Format(pMessage, pFormatArguments), pStackTrace);
         }
 
-        public static LogResult LogWarning(Exception pException, string pMessage = null)
+        public static LogResult LogWarning(Exception pException, string pMessage = null, params object[] pFormatArguments)
         {
-            string message = (pMessage != null) ? String.Format("{0}: {1}", pMessage, pException.Message) : pException.Message;
+            string message = (pMessage != null) ? String.Format("{0}: {1}", String.Format(pMessage, pFormatArguments), pException.Message) : pException.Message;
 
             return LogItem(LogLevel.Warning, message, pException.StackTrace);
         }
