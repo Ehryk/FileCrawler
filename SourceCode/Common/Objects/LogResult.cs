@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Common.Logging
 {
-    public class LogResult
+    public class LogResult : OperationResult
     {
         private bool _hasError = false;
         private string _errorMessage = string.Empty;

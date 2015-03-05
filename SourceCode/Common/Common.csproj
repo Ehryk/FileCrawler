@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Objects\DataOperationResult.cs" />
     <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Extensions\AssemblyInfo.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
@@ -54,11 +55,13 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Interfaces\IDataAccess.cs" />
     <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\LogResult.cs" />
+    <Compile Include="Objects\LogResult.cs" />
     <Compile Include="Objects\DirectoryData.cs" />
     <Compile Include="Objects\FileData.cs" />
     <Compile Include="Enums\CrawlType.cs" />
+    <Compile Include="Objects\OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
