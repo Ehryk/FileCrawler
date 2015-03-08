@@ -47,6 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\InaccessibleEventHandler.cs" />
+    <Compile Include="Events\InaccessibleEventArgs.cs" />
+    <Compile Include="Events\DirectoryDataEventArgs.cs" />
+    <Compile Include="Events\DirectoryDataEventHandler.cs" />
+    <Compile Include="Events\FileDataEventHandler.cs" />
     <Compile Include="Objects\DataOperationResult.cs" />
     <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Extensions\AssemblyInfo.cs" />
@@ -57,6 +62,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Interfaces\IDataAccess.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Events\FileDataEventArgs.cs" />
     <Compile Include="Objects\LogResult.cs" />
     <Compile Include="Objects\DirectoryData.cs" />
     <Compile Include="Objects\FileData.cs" />

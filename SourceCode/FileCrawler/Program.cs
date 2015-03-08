@@ -45,6 +45,7 @@ namespace FileCrawler
             }
 
             FileCrawler crawler = new FileCrawler(args[0], type);
+            crawler.AttachDataAccess(new DataAccess.Test());
             crawler.StartCrawl();
 
             foreach (FileData data in crawler.Files)

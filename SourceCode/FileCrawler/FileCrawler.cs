@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Events;
 using Common.Enums;
 using Common.Extensions;
 using Common.Logging;
+using Common.Interfaces;
 
 namespace FileCrawler
 {
@@ -112,6 +114,20 @@ namespace FileCrawler
 
         #endregion
 
+        #region Events
+
+        public event EventHandler OnCrawlStart;
+        public event DirectoryDataEventHandler OnDirectoryFound;
+        public event FileDataEventHandler OnFileFound;
+        public event FileDataEventHandler OnFileProcessed;
+        public event DirectoryDataEventHandler OnDirectoryProcessed;
+        public event ErrorEventHandler OnCrawlError;
+        public event InaccessibleEventHandler OnFileInaccessible;
+        public event InaccessibleEventHandler OnDirectoryInaccessible;
+        public event EventHandler OnCrawlEnd;
+
+        #endregion
+
         #region Constructors
 
         public FileCrawler(string pPath, CrawlType pType = CrawlType.Full)
@@ -138,18 +154,61 @@ namespace FileCrawler
 
             try
             {
+                if (OnCrawlStart != null)
+                    OnCrawlStart(this, EventArgs.Empty);
+
                 RootDirectory = new DirectoryData(path);
                 ProcessDirectory(RootDirectory, ref retCode, type);
                 success = true;
             }
             catch (Exception ex)
             {
+                if (OnCrawlError != null)
+                    OnCrawlError(this, new ErrorEventArgs(ex));
+
                 Logger.LogError(ex, "Could not process root directory {0}", RootDirectory.Path);
+            }
+            finally
+            {
+                if (OnCrawlEnd != null)
+                    OnCrawlEnd(this, EventArgs.Empty);
             }
 
             stopwatch.Stop();
             crawlComplete = true;
             return success;
+        }
+
+        public bool AttachDataAccess(IDataAccess pDataAccess)
+        {
+            try
+            {
+                if (pDataAccess.UsesCrawlStart())
+                    this.OnCrawlStart += pDataAccess.CrawlStart;
+                if (pDataAccess.UsesDirectoryFound())
+                    this.OnDirectoryFound += pDataAccess.DirectoryFound;
+                if (pDataAccess.UsesFileFound())
+                    this.OnFileFound += pDataAccess.FileFound;
+                if (pDataAccess.UsesFileProcessed())
+                    this.OnFileProcessed += pDataAccess.FileProcessed;
+                if (pDataAccess.UsesDirectoryProcessed())
+                    this.OnDirectoryProcessed += pDataAccess.DirectoryProcessed;
+                if (pDataAccess.UsesCrawlError())
+                    this.OnCrawlError += pDataAccess.CrawlError;
+                if (pDataAccess.UsesFileInaccessible())
+                    this.OnFileInaccessible += pDataAccess.FileInaccessible;
+                if (pDataAccess.UsesDirectoryInaccessible())
+                    this.OnDirectoryInaccessible += pDataAccess.DirectoryInaccessible;
+                if (pDataAccess.UsesCrawlEnd())
+                    this.OnCrawlEnd += pDataAccess.CrawlEnd;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "DataAccess {0} Attachment failed", pDataAccess.Name());
+                return false;
+            }
         }
 
         #endregion
@@ -164,6 +223,9 @@ namespace FileCrawler
             if (!directory.Exists)
                 throw new DirectoryNotFoundException(String.Format("{0} {1} not found.", pIsSubdirectory ? "Subdirectory" : "Directory", directory.FullName));
 
+            if (OnDirectoryFound != null)
+                OnDirectoryFound(this, new DirectoryDataEventArgs(pDirectory));
+
             List<FileInfo> filesToProcess = CrawlUtilities.GetFilesToProcess(directory, type, pIsSubdirectory);
             
             int processed = 0;
@@ -173,14 +235,16 @@ namespace FileCrawler
                 try
                 {
                     FileData data = new FileData(info);
-
                     ProcessFile(data, ref pDirectory);
-
                     processed++;
                 }
                 catch (Exception ex)
                 {
                     Logger.LogWarning(ex, "File {0} is inaccessible", info.FullName);
+
+                    if (OnFileInaccessible != null)
+                        OnFileInaccessible(this, new InaccessibleEventArgs(info, ex));
+
                     inaccessibleFiles.Add(info.FullName);
                 }
             }
@@ -194,12 +258,20 @@ namespace FileCrawler
                     try
                     {
                         DirectoryData data = new DirectoryData(info);
+
+                        if (OnDirectoryFound != null)
+                            OnDirectoryFound(this, new DirectoryDataEventArgs(data));
+
                         directories.Add(data);
                         directoryCount++;
                     }
                     catch (Exception ex)
                     {
                         Logger.LogWarning(ex, "Directory {0} is inaccessible", info.FullName);
+
+                        if (OnDirectoryInaccessible != null)
+                            OnDirectoryInaccessible(this, new InaccessibleEventArgs(info, ex));
+
                         inaccessibleDirectories.Add(info.FullName);
                     }
                 }
@@ -214,16 +286,27 @@ namespace FileCrawler
                     try
                     {
                         DirectoryData data = new DirectoryData(info);
+
+                        if (OnDirectoryFound != null)
+                            OnDirectoryFound(this, new DirectoryDataEventArgs(data));
+
                         processed += ProcessDirectory(data, ref pRetCode, type, pLoadSubdirectories, true);
                         directories.Add(data);
                     }
                     catch (Exception ex)
                     {
                         Logger.LogWarning(ex, "Directory {0} is inaccessible", info.FullName);
+
+                        if (OnDirectoryInaccessible != null)
+                            OnDirectoryInaccessible(this, new InaccessibleEventArgs(info, ex));
+
                         inaccessibleDirectories.Add(info.FullName);
                     }
                 }
             }
+
+            if (OnDirectoryProcessed != null)
+                OnDirectoryProcessed(this, new DirectoryDataEventArgs(pDirectory));
 
             return processed;
         }
@@ -232,16 +315,16 @@ namespace FileCrawler
         {
             data.IsCompressedContainer = CrawlUtilities.IsContainer(data);
 
+            if (OnFileFound != null)
+                OnFileFound(this, new FileDataEventArgs(data, directory));
+
             if (data.IsCompressedContainer && !data.IsContained)
             {
                 //Container file, not contained within another container
                 if (AppSettings.Compressed_ReportContainers)
                 {
                     //Add Container
-                    files.Add(data);
-                    fileCount++;
-                    totalSize += data.Size;
-                    UpdateSizes();
+                    AddFile(data, directory);
                 }
 
                 if (AppSettings.Compressed_ReadContents)
@@ -260,10 +343,7 @@ namespace FileCrawler
                 if (AppSettings.Compressed_ReportContainers)
                 {
                     //Add Container
-                    files.Add(data);
-                    fileCount++;
-                    totalSize += data.Size;
-                    UpdateSizes();
+                    AddFile(data, directory);
                 }
 
                 string localCopy = CrawlUtilities.ExtractFile(data);
@@ -278,14 +358,24 @@ namespace FileCrawler
             else
             {
                 //Non Container File or a nested container when not set to recurse
-                files.Add(data);
-                fileCount++;
-                totalSize += data.Size;
-                UpdateSizes();
+                AddFile(data, directory);
             }
 
             directory.FileCount++;
             directory.TotalSize += data.Size;
+            return true;
+        }
+
+        private bool AddFile(FileData pFile, DirectoryData pParent)
+        {
+            files.Add(pFile);
+            fileCount++;
+            totalSize += pFile.Size;
+            UpdateSizes();
+
+            if (OnFileProcessed != null)
+                OnFileProcessed(this, new FileDataEventArgs(pFile, pParent));
+
             return true;
         }
 
