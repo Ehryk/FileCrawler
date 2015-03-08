@@ -11,14 +11,14 @@ using System.IO;
 
 namespace DataAccess
 {
-    public class Test : IDataAccess
+    public class Individual : IDataAccess
     {
-        public string Name() { return "Test"; }
+        public string Name() { return "Individual"; }
 
         public bool UsesCrawlStart() { return true; }
         public bool UsesDirectoryFound() { return false; }
         public bool UsesFileFound() { return false; }
-        public bool UsesFileProcessed() { return false; }
+        public bool UsesFileProcessed() { return true; }
         public bool UsesDirectoryProcessed() { return false; }
         public bool UsesCrawlError() { return true; }
         public bool UsesFileInaccessible() { return false; }
@@ -40,6 +40,7 @@ namespace DataAccess
 
         public void FileProcessed(object sender, FileDataEventArgs e)
         {
+            //Insert File
         }
 
         public void DirectoryProcessed(object sender, DirectoryDataEventArgs e)

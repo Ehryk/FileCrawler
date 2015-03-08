@@ -4,24 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Events;
+using System.IO;
 
 namespace Common.Interfaces
 {
     public interface IDataAccess
     {
-        DataOperationResult GetFileData();
-        DataOperationResult GetDirectoryData();
+        string Name();
 
-        DataOperationResult InsertFileData(FileData data);
-        DataOperationResult InsertDirectoryData(DirectoryData data);
+        bool UsesCrawlStart();
+        void CrawlStart(object sender, EventArgs e);
 
-        DataOperationResult InsertFileData(IEnumerable<FileData> data);
-        DataOperationResult InsertDirectoryData(IEnumerable<DirectoryData> data);
+        bool UsesDirectoryFound();
+        void DirectoryFound(object sender, DirectoryDataEventArgs e);
 
-        DataOperationResult UpdateFileData(FileData data);
-        DataOperationResult UpdateDirectoryData(DirectoryData data);
+        bool UsesFileFound();
+        void FileFound(object sender, FileDataEventArgs e);
 
-        DataOperationResult DeleteFileData(FileData data);
-        DataOperationResult DeleteDirectoryData(DirectoryData data);
+        bool UsesFileProcessed();
+        void FileProcessed(object sender, FileDataEventArgs e);
+
+        bool UsesDirectoryProcessed();
+        void DirectoryProcessed(object sender, DirectoryDataEventArgs e);
+
+        bool UsesCrawlError();
+        void CrawlError(object sender, ErrorEventArgs e);
+
+        bool UsesFileInaccessible();
+        void FileInaccessible(object sender, InaccessibleEventArgs e);
+
+        bool UsesDirectoryInaccessible();
+        void DirectoryInaccessible(object sender, InaccessibleEventArgs e);
+
+        bool UsesCrawlEnd();
+        void CrawlEnd(object sender, EventArgs e);
     }
 }

@@ -11,23 +11,22 @@ using System.IO;
 
 namespace DataAccess
 {
-    public class Test : IDataAccess
+    public class Null : IDataAccess
     {
-        public string Name() { return "Test"; }
+        public string Name() { return "Null"; }
 
-        public bool UsesCrawlStart() { return true; }
+        public bool UsesCrawlStart() { return false; }
         public bool UsesDirectoryFound() { return false; }
         public bool UsesFileFound() { return false; }
         public bool UsesFileProcessed() { return false; }
         public bool UsesDirectoryProcessed() { return false; }
-        public bool UsesCrawlError() { return true; }
+        public bool UsesCrawlError() { return false; }
         public bool UsesFileInaccessible() { return false; }
         public bool UsesDirectoryInaccessible() { return false; }
-        public bool UsesCrawlEnd() { return true; }
+        public bool UsesCrawlEnd() { return false; }
 
         public void CrawlStart(object sender, EventArgs e)
         {
-            Logger.LogDebug("DataAccess Test: Crawl Started.");
         }
 
         public void DirectoryFound(object sender, DirectoryDataEventArgs e)
@@ -48,7 +47,6 @@ namespace DataAccess
 
         public void CrawlError(object sender, ErrorEventArgs e)
         {
-            Logger.LogError(e.GetException(), "DataAccess Test: Error");
         }
 
         public void FileInaccessible(object sender, InaccessibleEventArgs e)
@@ -61,7 +59,6 @@ namespace DataAccess
 
         public void CrawlEnd(object sender, EventArgs e)
         {
-            Logger.LogDebug("DataAccess Test: Crawl Ended.");
         }
     }
 }

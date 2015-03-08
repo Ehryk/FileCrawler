@@ -11,23 +11,23 @@ using System.IO;
 
 namespace DataAccess
 {
-    public class Test : IDataAccess
+    public class Bulk : IDataAccess
     {
-        public string Name() { return "Test"; }
+        public string Name() { return "Bulk"; }
 
         public bool UsesCrawlStart() { return true; }
         public bool UsesDirectoryFound() { return false; }
         public bool UsesFileFound() { return false; }
-        public bool UsesFileProcessed() { return false; }
-        public bool UsesDirectoryProcessed() { return false; }
-        public bool UsesCrawlError() { return true; }
+        public bool UsesFileProcessed() { return true; }
+        public bool UsesDirectoryProcessed() { return true; }
+        public bool UsesCrawlError() { return false; }
         public bool UsesFileInaccessible() { return false; }
         public bool UsesDirectoryInaccessible() { return false; }
         public bool UsesCrawlEnd() { return true; }
 
         public void CrawlStart(object sender, EventArgs e)
         {
-            Logger.LogDebug("DataAccess Test: Crawl Started.");
+            //Clear Loading
         }
 
         public void DirectoryFound(object sender, DirectoryDataEventArgs e)
@@ -40,15 +40,19 @@ namespace DataAccess
 
         public void FileProcessed(object sender, FileDataEventArgs e)
         {
+            if (e.FileData.IsCompressedContainer)
+            {
+                //Insert Container's Files
+            }
         }
 
         public void DirectoryProcessed(object sender, DirectoryDataEventArgs e)
         {
+            //Insert Directory's Files
         }
 
         public void CrawlError(object sender, ErrorEventArgs e)
         {
-            Logger.LogError(e.GetException(), "DataAccess Test: Error");
         }
 
         public void FileInaccessible(object sender, InaccessibleEventArgs e)
@@ -61,7 +65,7 @@ namespace DataAccess
 
         public void CrawlEnd(object sender, EventArgs e)
         {
-            Logger.LogDebug("DataAccess Test: Crawl Ended.");
+            //Perform Diff
         }
     }
 }
