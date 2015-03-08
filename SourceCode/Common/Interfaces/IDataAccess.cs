@@ -7,7 +7,7 @@ using Common;
 
 namespace Common.Interfaces
 {
-    interface IDataAccess
+    public interface IDataAccess
     {
         DataOperationResult GetFileData();
         DataOperationResult GetDirectoryData();

@@ -67,6 +67,10 @@
       <Project>{c087edc1-92eb-46c6-abc7-745cf3ccab0d}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{aafdb3b6-6079-40ee-bac1-3a7c92e6ac5b}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />

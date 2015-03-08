@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCrawler", "FileCrawler\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{AAFDB3B6-6079-40EE-BAC1-3A7C92E6AC5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C087EDC1-92EB-46C6-ABC7-745CF3CCAB0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAFDB3B6-6079-40EE-BAC1-3A7C92E6AC5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAFDB3B6-6079-40EE-BAC1-3A7C92E6AC5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAFDB3B6-6079-40EE-BAC1-3A7C92E6AC5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAFDB3B6-6079-40EE-BAC1-3A7C92E6AC5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
