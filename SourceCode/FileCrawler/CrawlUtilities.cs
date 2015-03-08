@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Enums;
 using Common.Extensions;
 using SevenZip;
 
 namespace FileCrawler
 {
-    public static class Utilities
+    public static class CrawlUtilities
     {
         #region File Utilities
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Enums;
 using Common.Extensions;
 using Common.Logging;
 
@@ -163,7 +164,7 @@ namespace FileCrawler
             if (!directory.Exists)
                 throw new DirectoryNotFoundException(String.Format("{0} {1} not found.", pIsSubdirectory ? "Subdirectory" : "Directory", directory.FullName));
 
-            List<FileInfo> filesToProcess = Utilities.GetFilesToProcess(directory, type, pIsSubdirectory);
+            List<FileInfo> filesToProcess = CrawlUtilities.GetFilesToProcess(directory, type, pIsSubdirectory);
             
             int processed = 0;
 
@@ -187,7 +188,7 @@ namespace FileCrawler
             //Subdirectory Processing is Optional for these crawl types; specify with pLoadSubdirectories
             if ((type == CrawlType.Full || type == CrawlType.Shallow) && (pLoadSubdirectories || AppSettings.ReportDirectories))
             {
-                List<DirectoryInfo> directoriesToProcess = Utilities.GetDirectoriesToProcess(directory, type);
+                List<DirectoryInfo> directoriesToProcess = CrawlUtilities.GetDirectoriesToProcess(directory, type);
                 foreach (DirectoryInfo info in directoriesToProcess)
                 {
                     try
@@ -207,7 +208,7 @@ namespace FileCrawler
             //Subdirectory Processing is mandatory for these crawl types
             if (type == CrawlType.RecurseSubdirectories || type == CrawlType.Recursive)
             {
-                List<DirectoryInfo> directoriesToProcess = Utilities.GetDirectoriesToProcess(directory, type);
+                List<DirectoryInfo> directoriesToProcess = CrawlUtilities.GetDirectoriesToProcess(directory, type);
                 foreach (DirectoryInfo info in directoriesToProcess)
                 {
                     try
@@ -229,7 +230,7 @@ namespace FileCrawler
 
         private bool ProcessFile(FileData data, ref DirectoryData directory)
         {
-            data.IsCompressedContainer = Utilities.IsContainer(data);
+            data.IsCompressedContainer = CrawlUtilities.IsContainer(data);
 
             if (data.IsCompressedContainer && !data.IsContained)
             {
@@ -245,7 +246,7 @@ namespace FileCrawler
 
                 if (AppSettings.Compressed_ReadContents)
                 {
-                    List<FileData> contents = Utilities.ReadContainerContents(data.Path, data);
+                    List<FileData> contents = CrawlUtilities.ReadContainerContents(data.Path, data);
 
                     foreach (FileData cData in contents)
                     {
@@ -265,9 +266,9 @@ namespace FileCrawler
                     UpdateSizes();
                 }
 
-                string localCopy = Utilities.ExtractFile(data);
+                string localCopy = CrawlUtilities.ExtractFile(data);
 
-                List<FileData> contents = Utilities.ReadContainerContents(localCopy, data);
+                List<FileData> contents = CrawlUtilities.ReadContainerContents(localCopy, data);
 
                 foreach (FileData cData in contents)
                 {
