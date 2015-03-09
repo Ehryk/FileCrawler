@@ -19,6 +19,7 @@ Latest Changes:
 Release History:
 ---
  - v1.0 2015.03.01 This release is a functional parser enumerate a directory with little other functionality
+ - v1.1 2015.03.02 Additional features: Container Enumeration with 7zip, Reporting Inaccessible Files and Directories
 
 Author:
  - Eric Menze ([@Ehryk42](https://twitter.com/Ehryk42))
