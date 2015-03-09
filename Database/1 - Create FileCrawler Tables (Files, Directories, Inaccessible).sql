@@ -2,6 +2,15 @@
 USE FileCrawler
 GO
 
+/*
+DROP TABLE Files_Loading
+DROP TABLE Files_Deleted
+DROP TABLE Files
+DROP TABLE Directories_Deleted
+DROP TABLE Directories
+DROP TABLE Inaccessible
+*/
+
 CREATE TABLE Files_Loading
 (
 	ID int primary key not null identity(1,1),
