@@ -31,9 +31,9 @@ namespace FileCrawler
         private int fileCount;
         private int directoryCount;
         private long totalSize;
-        private double totalSizeKB;
-        private double totalSizeMB;
-        private double totalSizeGB;
+        private decimal totalSizeKB;
+        private decimal totalSizeMB;
+        private decimal totalSizeGB;
 
         #endregion
 
@@ -97,17 +97,17 @@ namespace FileCrawler
             get { return totalSize; }
         }
 
-        public double TotalSizeKB
+        public decimal TotalSizeKB
         {
             get { return totalSizeKB; }
         }
 
-        public double TotalSizeMB
+        public decimal TotalSizeMB
         {
             get { return totalSizeMB; }
         }
 
-        public double TotalSizeGB
+        public decimal TotalSizeGB
         {
             get { return totalSizeGB; }
         }

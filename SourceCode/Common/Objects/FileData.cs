@@ -36,9 +36,9 @@ namespace Common
         public string ContainedPath;
 
         public long Size;
-        public double KB;
-        public double MB;
-        public double GB;
+        public decimal KB;
+        public decimal MB;
+        public decimal GB;
 
         public DateTime? CreateTime;
         public DateTime? CreateTimeUtc;
