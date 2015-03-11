@@ -77,14 +77,15 @@ namespace Common.Objects
             IsLocal = !IsNetwork;
 
             Directory = info.DirectoryName;
-            ParentName = info.Directory.Parent.Name;
+            if (info.Directory != null && info.Directory.Parent != null)
+                ParentName = info.Directory.Parent.Name;
             Name = info.Name;
             Extension = info.Extension;
             ReadOnly = info.IsReadOnly;
 
             Size = info.Length;
 
-            FileAttributes Attributes = info.Attributes;
+            Attributes = info.Attributes;
 
             try
             {

@@ -42,9 +42,7 @@ namespace Common.Objects
 
         public DirectoryData(string path)
         {
-            //Fix to allow windows drive letters (C:, D:, etc.) to be a valid path
-            if (path.Trim().EndsWith(":") && path.Trim().Length == 2)
-                path = path.Trim() + '\\';
+            path = FileExtensions.FixPath(path);
 
             Path = path;
 
@@ -71,9 +69,11 @@ namespace Common.Objects
             IsLocal = !IsNetwork;
 
             Name = info.Name;
-            ParentName = info.Parent.Name;
 
-            FileAttributes Attributes = info.Attributes;
+            if (info.Parent != null)
+                ParentName = info.Parent.Name;
+
+            Attributes = info.Attributes;
 
             try
             {

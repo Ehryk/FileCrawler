@@ -53,7 +53,7 @@ namespace FileCrawler
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Crawling {0}... ", args[0]);
 
-            FileCrawler crawler = new FileCrawler(args[0], type);
+            FileCrawler crawler = new FileCrawler(FileExtensions.FixPath(args[0]), type);
             crawler.AttachOutput(new Output.Console(!AppSettings.Quiet));
             crawler.StartCrawl();
 

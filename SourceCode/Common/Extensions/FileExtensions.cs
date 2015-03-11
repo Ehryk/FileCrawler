@@ -25,5 +25,14 @@ namespace Common.Extensions
         {
             return (attributes & value) == value;
         }
+
+        public static string FixPath(string path)
+        {
+            //Fix to allow windows drive letters (C:, D:, etc.) to be a valid path
+            path = path.Trim();
+            if (path.EndsWith(":") && path.Length == 2)
+                path = path + '\\';
+            return path;
+        }
     }
 }
