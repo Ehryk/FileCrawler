@@ -1,13 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using Common.Extensions;
 
-namespace Common
+namespace Common.Objects
 {
     public class DirectoryData
     {

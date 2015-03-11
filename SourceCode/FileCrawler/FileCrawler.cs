@@ -2,15 +2,13 @@
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using Common.Events;
 using Common.Enums;
 using Common.Extensions;
 using Common.Logging;
 using Common.Interfaces;
+using Common.Objects;
 
 namespace FileCrawler
 {

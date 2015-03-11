@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
 using Common.Events;
 using Common.Extensions;
 using Common.Interfaces;
-using Common.Logging;
 using System.IO;
 
 namespace Output

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.Configuration;
 using System.Xml;
+using Common.Objects;
 using log4net;
 using Common.Enums;
 using Common.Extensions;
@@ -14,7 +10,7 @@ namespace Common.Logging
 {
     public static class Logger
     {
-        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private static string connectionString = ConfigurationManager.ConnectionStrings["Logging"] != null ? ConfigurationManager.ConnectionStrings["Logging"].ConnectionString : null;
         private static string logProcedure = ConfigurationManager.AppSettings["DataProcedure_LogInsert"];
@@ -72,7 +68,7 @@ namespace Common.Logging
             try
             {
                 // Only configure log4net once per process
-                if (!log4net.LogManager.GetRepository().Configured)
+                if (!LogManager.GetRepository().Configured)
                 {
                     ConfigurationSection logSection = ConfigurationManager.GetSection("log4net") as ConfigurationSection;
                     XmlElement logElement = logSection.SectionInformation.GetRawXml().ToXmlElement();
@@ -98,20 +94,20 @@ namespace Common.Logging
                 adoAppender.ActivateOptions();
 
                 string applicationName = AppDomain.CurrentDomain.FriendlyName.Split('.')[0];
-                log4net.GlobalContext.Properties["application"] = applicationName;
+                GlobalContext.Properties["application"] = applicationName;
 
                 switch (pLevel)
                 {
                     case LogLevel.Fatal:
-                        log4net.GlobalContext.Properties["stack"] = pStackTrace;
+                        GlobalContext.Properties["stack"] = pStackTrace;
                         _log.Fatal(pMessage);
                         break;
                     case LogLevel.Error:
-                        log4net.GlobalContext.Properties["stack"] = pStackTrace;
+                        GlobalContext.Properties["stack"] = pStackTrace;
                         _log.Error(pMessage);
                         break;
                     case LogLevel.Warning:
-                        log4net.GlobalContext.Properties["stack"] = pStackTrace;
+                        GlobalContext.Properties["stack"] = pStackTrace;
                         _log.Warn(pMessage);
                         break;
                     case LogLevel.Info:

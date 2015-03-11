@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Data;
-using System.Configuration;
-using System.Web;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
 
-namespace Common
+namespace Common.Objects
 {
     /// <summary>
     /// Summary description for DataOperationResult
