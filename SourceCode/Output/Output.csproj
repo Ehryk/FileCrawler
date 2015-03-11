@@ -44,7 +44,7 @@
     <Compile Include="Null.cs" />
     <Compile Include="Bulk.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Test.cs" />
+    <Compile Include="Debug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

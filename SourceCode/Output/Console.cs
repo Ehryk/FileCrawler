@@ -16,6 +16,10 @@ namespace Output
     {
         #region Properties
 
+        public bool ReportStartEnd = true;
+        public bool ReportDirectories = true;
+        public bool ReportInaccessible = true;
+
         public ConsoleColor SummaryColor = ConsoleColor.Cyan;
         public ConsoleColor DirectoryColor = ConsoleColor.Cyan;
         public ConsoleColor FileColor = ConsoleColor.Gray;
@@ -27,15 +31,15 @@ namespace Output
 
         public string Name() { return GetType().Name; }
 
-        public bool UsesCrawlStart() { return true; }
-        public bool UsesDirectoryFound() { return false; }
+        public bool UsesCrawlStart() { return ReportStartEnd; }
+        public bool UsesDirectoryFound() { return ReportDirectories; }
         public bool UsesFileFound() { return false; }
         public bool UsesFileProcessed() { return true; }
-        public bool UsesDirectoryProcessed() { return false; }
+        public bool UsesDirectoryProcessed() { return ReportDirectories; }
         public bool UsesCrawlError() { return true; }
-        public bool UsesFileInaccessible() { return false; }
-        public bool UsesDirectoryInaccessible() { return false; }
-        public bool UsesCrawlEnd() { return true; }
+        public bool UsesFileInaccessible() { return ReportInaccessible; }
+        public bool UsesDirectoryInaccessible() { return ReportInaccessible; }
+        public bool UsesCrawlEnd() { return ReportStartEnd; }
 
         public void CrawlStart(object sender, EventArgs e)
         {
