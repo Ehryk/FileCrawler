@@ -9,9 +9,9 @@ using Common.Interfaces;
 using Common.Logging;
 using System.IO;
 
-namespace DataAccess
+namespace Output
 {
-    public class Bulk : IDataAccess
+    public class Bulk : IOutput
     {
         public string Name() { return "Bulk"; }
 

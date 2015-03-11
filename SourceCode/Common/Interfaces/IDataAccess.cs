@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Common.Interfaces
 {
-    public interface IDataAccess
+    public interface IOutput
     {
         string Name();
 

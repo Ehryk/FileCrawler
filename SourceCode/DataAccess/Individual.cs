@@ -9,9 +9,9 @@ using Common.Interfaces;
 using Common.Logging;
 using System.IO;
 
-namespace DataAccess
+namespace Output
 {
-    public class Individual : IDataAccess
+    public class Individual : IOutput
     {
         public string Name() { return "Individual"; }
 

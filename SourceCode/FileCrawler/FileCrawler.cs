@@ -189,7 +189,7 @@ namespace FileCrawler
             return success;
         }
 
-        public bool AttachDataAccess(IDataAccess pDataAccess)
+        public bool AttachDataAccess(IOutput pDataAccess)
         {
             try
             {

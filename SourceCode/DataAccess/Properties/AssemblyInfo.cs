@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DataAccess")]
-[assembly: AssemblyDescription("Contains various data access providers.")]
+[assembly: AssemblyTitle("Output")]
+[assembly: AssemblyDescription("Contains various output definitions.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eric Menze")]
 [assembly: AssemblyProduct("FileCrawler")]
