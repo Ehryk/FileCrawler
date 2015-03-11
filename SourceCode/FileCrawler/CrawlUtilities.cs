@@ -124,7 +124,7 @@ namespace FileCrawler
         public static bool IsDirectory(this string path)
         {
             FileAttributes attr = File.GetAttributes(path);
-            return (attr & FileAttributes.Directory) == FileAttributes.Directory;
+            return attr.HasAttribute(FileAttributes.Directory);
         }
 
         public static string GetFullPath(FileInfo src)
