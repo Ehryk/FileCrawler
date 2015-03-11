@@ -11,14 +11,20 @@ using System.IO;
 
 namespace Output
 {
-    public class Test : IOutput
+    public class Individual : IOutput
     {
-        public string Name() { return "Test"; }
+        #region Properties
+
+        #endregion
+
+        #region IOutput Members
+
+        public string Name() { return GetType().Name; }
 
         public bool UsesCrawlStart() { return true; }
         public bool UsesDirectoryFound() { return false; }
         public bool UsesFileFound() { return false; }
-        public bool UsesFileProcessed() { return false; }
+        public bool UsesFileProcessed() { return true; }
         public bool UsesDirectoryProcessed() { return false; }
         public bool UsesCrawlError() { return true; }
         public bool UsesFileInaccessible() { return false; }
@@ -27,7 +33,7 @@ namespace Output
 
         public void CrawlStart(object sender, EventArgs e)
         {
-            Logger.LogDebug("DataAccess Test: Crawl Started.");
+            Common.Logging.Logger.LogDebug("DataAccess Test: Crawl Started.");
         }
 
         public void DirectoryFound(object sender, DirectoryDataEventArgs e)
@@ -40,6 +46,7 @@ namespace Output
 
         public void FileProcessed(object sender, FileDataEventArgs e)
         {
+            //Insert File
         }
 
         public void DirectoryProcessed(object sender, DirectoryDataEventArgs e)
@@ -48,7 +55,7 @@ namespace Output
 
         public void CrawlError(object sender, ErrorEventArgs e)
         {
-            Logger.LogError(e.GetException(), "DataAccess Test: Error");
+            Common.Logging.Logger.LogError(e.GetException(), "DataAccess Test: Error");
         }
 
         public void FileInaccessible(object sender, InaccessibleEventArgs e)
@@ -61,7 +68,13 @@ namespace Output
 
         public void CrawlEnd(object sender, EventArgs e)
         {
-            Logger.LogDebug("DataAccess Test: Crawl Ended.");
+            Common.Logging.Logger.LogDebug("DataAccess Test: Crawl Ended.");
         }
+
+        #endregion
+
+        #region Methods
+
+        #endregion
     }
 }

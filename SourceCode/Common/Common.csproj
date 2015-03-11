@@ -60,7 +60,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Interfaces\IDataAccess.cs" />
+    <Compile Include="Interfaces\IOutput.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Events\FileDataEventArgs.cs" />
     <Compile Include="Objects\LogResult.cs" />
