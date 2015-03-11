@@ -114,6 +114,7 @@ namespace FileCrawler
         public event DirectoryDataEventHandler OnDirectoryFound;
         public event FileDataEventHandler OnFileFound;
         public event FileDataEventHandler OnFileProcessed;
+        public event DirectoryDataEventHandler OnDirectoryFilesProcessed;
         public event DirectoryDataEventHandler OnDirectoryProcessed;
         public event ErrorEventHandler OnCrawlError;
         public event InaccessibleEventHandler OnFileInaccessible;
@@ -259,8 +260,8 @@ namespace FileCrawler
                 }
             }
 
-            if (OnDirectoryProcessed != null)
-                OnDirectoryProcessed(this, new DirectoryDataEventArgs(pDirectory));
+            if (OnDirectoryFilesProcessed != null)
+                OnDirectoryFilesProcessed(this, new DirectoryDataEventArgs(pDirectory, true));
 
             //Subdirectory Processing is Optional for these crawl types; specify with pLoadSubdirectories
             if ((type == CrawlType.Full || type == CrawlType.Shallow) && (pLoadSubdirectories || AppSettings.ReportDirectories))
@@ -315,6 +316,9 @@ namespace FileCrawler
                     }
                 }
             }
+
+            if (OnDirectoryProcessed != null)
+                OnDirectoryProcessed(this, new DirectoryDataEventArgs(pDirectory, true, true));
 
             return processed;
         }
@@ -387,7 +391,7 @@ namespace FileCrawler
             totalSize += pFile.Size;
 
             if (OnFileProcessed != null)
-                OnFileProcessed(this, new FileDataEventArgs(pFile, pParent));
+                OnFileProcessed(this, new FileDataEventArgs(pFile, pParent, true));
 
             return true;
         }

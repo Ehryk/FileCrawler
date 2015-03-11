@@ -42,6 +42,10 @@ namespace Common.Objects
 
         public DirectoryData(string path)
         {
+            //Fix to allow windows drive letters (C:, D:, etc.) to be a valid path
+            if (path.Trim().EndsWith(":") && path.Trim().Length == 2)
+                path = path.Trim() + '\\';
+
             Path = path;
 
             Root = System.IO.Path.GetPathRoot(Path);
