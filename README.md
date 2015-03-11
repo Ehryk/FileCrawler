@@ -1,4 +1,4 @@
-FileCrawler v1.1
+FileCrawler v1.2
 ================
 
 This Windows console application will enumerate the contents of a directory and can perform various tasks with the output, including displaying in the console window, loading into a database, saving into an .xml or .json file, and can be extended into more.
@@ -8,7 +8,7 @@ Usage:
  - ``FileCrawler``, ``FileCrawler.exe``, ``FileCrawler -h``
    - Displays help screen
  - ``FileCrawler "Path"``
-   - Crawls the given path
+   - Crawls the given path (file or directory)
  - Options:
    - ``-h``, ``--help``: Displays help screen
 
@@ -18,8 +18,9 @@ Latest Changes:
 
 Release History:
 ---
- - v1.0 2015.03.01 This release is a functional parser enumerate a directory with little other functionality
+ - v1.2 2015.03.10 Supporting crawling individual files and additional output options (quiet, verbose)
  - v1.1 2015.03.02 Additional features: Container Enumeration with 7zip, Reporting Inaccessible Files and Directories
+ - v1.0 2015.03.01 This release is a functional parser enumerate a directory with little other functionality
 
 Author:
  - Eric Menze ([@Ehryk42](https://twitter.com/Ehryk42))
