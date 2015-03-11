@@ -22,7 +22,8 @@ namespace Common.Objects
         public string Name;
         public string Extension;
         public bool ReadOnly;
-        FileAttributes Attributes;
+        public FileAttributes Attributes;
+        public bool Hidden { get { return Attributes.HasAttribute(FileAttributes.Hidden); } }
 
         public bool IsCompressedContainer;
         public bool IsContained;
@@ -32,9 +33,10 @@ namespace Common.Objects
         public string ContainedPath;
 
         public long Size;
-        public decimal KB;
-        public decimal MB;
-        public decimal GB;
+
+        public decimal KB { get { return Size.GetKB(); } }
+        public decimal MB { get { return Size.GetMB(); } }
+        public decimal GB { get { return Size.GetGB(); } }
 
         public DateTime? CreateTime;
         public DateTime? CreateTimeUtc;
@@ -81,9 +83,6 @@ namespace Common.Objects
             ReadOnly = info.IsReadOnly;
 
             Size = info.Length;
-            KB = Size.GetKB();
-            MB = Size.GetMB();
-            GB = Size.GetGB();
 
             FileAttributes Attributes = info.Attributes;
 
@@ -130,9 +129,6 @@ namespace Common.Objects
             Extension = System.IO.Path.GetExtension(info.FileName);
 
             Size = (long)info.Size;
-            KB = Size.GetKB();
-            MB = Size.GetMB();
-            GB = Size.GetGB();
 
             //How can FileAttributes be retrived from uint?
             FileAttributes Attributes = (FileAttributes)info.Attributes;

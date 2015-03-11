@@ -19,7 +19,8 @@ namespace Common.Objects
         public string Name;
         public string ParentName;
         public bool ReadOnly;
-        FileAttributes Attributes;
+        public FileAttributes Attributes;
+        public bool Hidden { get { return Attributes.HasAttribute(FileAttributes.Hidden); } }
 
         public DateTime? CreateTime;
         public DateTime? CreateTimeUtc;
@@ -30,6 +31,10 @@ namespace Common.Objects
 
         public int FileCount;
         public long TotalSize;
+
+        public decimal TotalKB { get { return TotalSize.GetKB(); } }
+        public decimal TotalMB { get { return TotalSize.GetMB(); } }
+        public decimal TotalGB { get { return TotalSize.GetGB(); } }
 
         #endregion
 
