@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Configuration;
+using System.Runtime.InteropServices;
 using Common.Enums;
 using Common.Logging;
 using Common.Extensions;
@@ -16,6 +17,10 @@ namespace FileCrawler
             //Enable Longer History in Window
             Console.BufferHeight = 8000;
             Console.Title = String.Format("{0} v{1}", AssemblyInfo.ProductName, AssemblyInfo.Version);
+
+            //Quick Edit can halt processing from inadvertent highlighting
+            if (AppSettings.DisableQuickEdit)
+                DisableQuickEdit();
 
             if (!AppSettings.Quiet)
             {
@@ -49,11 +54,8 @@ namespace FileCrawler
             Console.Write("Crawling {0}... ", args[0]);
 
             FileCrawler crawler = new FileCrawler(args[0], type);
-            crawler.AttachOutput(new Output.Console());
+            crawler.AttachOutput(new Output.Console(!AppSettings.Quiet));
             crawler.StartCrawl();
-
-            Console.WriteLine("Done.");
-            Console.WriteLine();
 
             //WriteConsoleOutput(crawler);
 
@@ -184,5 +186,35 @@ namespace FileCrawler
                 Console.WriteLine();
             }
         }
+
+        public static void EnableQuickEdit()
+        {
+            IntPtr hStdin = GetStdHandle(STD_INPUT_HANDLE);
+            uint mode;
+            GetConsoleMode(hStdin, out mode);
+            mode &= ENABLE_QUICK_EDIT_MODE;
+            SetConsoleMode(hStdin, mode);
+        }
+
+        public static void DisableQuickEdit()
+        {
+            IntPtr hStdin = GetStdHandle(STD_INPUT_HANDLE);
+            uint mode;
+            GetConsoleMode(hStdin, out mode);
+            mode &= ~ENABLE_QUICK_EDIT_MODE;
+            SetConsoleMode(hStdin, mode);
+        }
+
+        const int STD_INPUT_HANDLE = -10;
+        const uint ENABLE_QUICK_EDIT_MODE = 0x0040;
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern IntPtr GetStdHandle(int hConsoleHandle);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint mode);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint mode);
     }
 }

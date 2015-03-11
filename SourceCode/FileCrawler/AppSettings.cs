@@ -13,6 +13,7 @@ namespace FileCrawler
         private static string leaveConsoleOpen = LoadValue("LeaveConsoleOpen");
         private static string quiet = LoadValue("Quiet");
         private static string verbose = LoadValue("Verbose");
+        private static string disableQuickEdit = LoadValue("DisableQuickEdit");
 
         private static string processingTemp = LoadValue("ProcessingTemp");
         private static string reportDirectories = LoadValue("ReportDirectories");
@@ -43,6 +44,11 @@ namespace FileCrawler
         public static bool Quiet
         {
             get { return quiet.ToBoolean(); }
+        }
+
+        public static bool DisableQuickEdit
+        {
+            get { return disableQuickEdit.ToBoolean(); }
         }
 
         public static string ProcessingTemp

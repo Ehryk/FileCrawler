@@ -16,9 +16,18 @@ namespace Output
         public bool ReportFiles = true;
 
         public ConsoleColor SummaryColor = ConsoleColor.Cyan;
-        public ConsoleColor DirectoryColor = ConsoleColor.Cyan;
+        public ConsoleColor DirectoryColor = ConsoleColor.White;
         public ConsoleColor FileColor = ConsoleColor.Gray;
         public ConsoleColor ErrorColor = ConsoleColor.Red;
+
+        #endregion
+
+        #region Constructors
+
+        public Console(bool pReportFiles = true)
+        {
+            ReportFiles = pReportFiles;
+        }
 
         #endregion
 
@@ -56,15 +65,15 @@ namespace Output
 
         public void FileProcessed(object sender, FileDataEventArgs e)
         {
-            WriteLine(FileColor, "{0} ({1:N2} MB)", e.FileData.Path);
+            WriteLine(FileColor, "{0} ({1:N2} MB)", e.FileData.Path, e.FileData.MB);
         }
 
         public void DirectoryProcessed(object sender, DirectoryDataEventArgs e)
         {
             if (ReportFiles)
-                WriteLine(DirectoryColor, "Processed Directory {0} ({1} files, {2:N2} MB)", e.DirectoryData.Path, e.DirectoryData.FileCount, e.DirectoryData.TotalSize.GetMB());
+                WriteLine(DirectoryColor, "Processed Directory {0} ({1} files, {2:N2} MB)", e.DirectoryData.Path, e.DirectoryData.FileCount, e.DirectoryData.TotalMB);
             else
-                WriteLine(DirectoryColor, "Done. ({0} files, {1:N2} MB)", e.DirectoryData.FileCount, e.DirectoryData.TotalSize.GetMB());
+                WriteLine(DirectoryColor, "Done. ({0} files, {1:N2} MB)", e.DirectoryData.FileCount, e.DirectoryData.TotalMB);
         }
 
         public void CrawlError(object sender, ErrorEventArgs e)
@@ -84,6 +93,7 @@ namespace Output
 
         public void CrawlEnd(object sender, EventArgs e)
         {
+            WriteLine();
             WriteLine(SummaryColor, "Crawl Ended {0}.", DateTime.Now.ToShortTimeString());
             WriteLine();
             System.Console.ResetColor();

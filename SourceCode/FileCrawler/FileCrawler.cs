@@ -259,6 +259,9 @@ namespace FileCrawler
                 }
             }
 
+            if (OnDirectoryProcessed != null)
+                OnDirectoryProcessed(this, new DirectoryDataEventArgs(pDirectory));
+
             //Subdirectory Processing is Optional for these crawl types; specify with pLoadSubdirectories
             if ((type == CrawlType.Full || type == CrawlType.Shallow) && (pLoadSubdirectories || AppSettings.ReportDirectories))
             {
@@ -297,11 +300,9 @@ namespace FileCrawler
                     {
                         DirectoryData data = new DirectoryData(info);
 
-                        if (OnDirectoryFound != null)
-                            OnDirectoryFound(this, new DirectoryDataEventArgs(data));
-
                         processed += ProcessDirectory(data, ref pRetCode, type, pLoadSubdirectories, true);
                         directories.Add(data);
+                        directoryCount++;
                     }
                     catch (Exception ex)
                     {
@@ -314,9 +315,6 @@ namespace FileCrawler
                     }
                 }
             }
-
-            if (OnDirectoryProcessed != null)
-                OnDirectoryProcessed(this, new DirectoryDataEventArgs(pDirectory));
 
             return processed;
         }
