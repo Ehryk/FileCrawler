@@ -13,6 +13,9 @@ namespace FileCrawler
         #region Private Key Definitions
 
         private static string leaveConsoleOpen = LoadValue("LeaveConsoleOpen");
+        private static string quiet = LoadValue("Quiet");
+        private static string verbose = LoadValue("Verbose");
+
         private static string processingTemp = LoadValue("ProcessingTemp");
         private static string reportDirectories = LoadValue("ReportDirectories");
 
@@ -32,6 +35,16 @@ namespace FileCrawler
         public static bool LeaveConsoleOpen
         {
             get { return leaveConsoleOpen.ToBoolean(); }
+        }
+
+        public static bool Verbose
+        {
+            get { return verbose.ToBoolean(); }
+        }
+
+        public static bool Quiet
+        {
+            get { return quiet.ToBoolean(); }
         }
 
         public static string ProcessingTemp

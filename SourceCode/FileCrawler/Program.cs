@@ -20,9 +20,13 @@ namespace FileCrawler
             //Enable Longer History in Window
             Console.BufferHeight = 8000;
             Console.Title = String.Format("{0} v{1}", AssemblyInfo.ProductName, AssemblyInfo.Version);
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(" --- {0} v{1}, {2} ---", AssemblyInfo.ProductName, AssemblyInfo.Version, AssemblyInfo.CompanyName);
-            Console.ForegroundColor = ConsoleColor.White;
+
+            if (!AppSettings.Quiet)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(" --- {0} v{1}, {2} ---", AssemblyInfo.ProductName, AssemblyInfo.Version, AssemblyInfo.CompanyName);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
 
             if (AppSettings.Compressed_ReadContents)
             {
@@ -44,50 +48,65 @@ namespace FileCrawler
                 type = (CrawlType)Enum.Parse(typeof(CrawlType), args[1]);
             }
 
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Crawling {0}... ", args[0]);
+
             FileCrawler crawler = new FileCrawler(args[0], type);
-            crawler.AttachDataAccess(new DataAccess.Test());
+            //crawler.AttachDataAccess(new DataAccess.Test());
             crawler.StartCrawl();
 
-            foreach (FileData data in crawler.Files)
-            {
-                Console.WriteLine(String.Format(@"{0} {1} {2:N1} KB", data.Path, data.Extension, data.KB));
-            }
+            Console.WriteLine("Done.");
+            Console.WriteLine();
 
-            if (AppSettings.ReportDirectories)
+            if (!AppSettings.Quiet)
             {
-                Console.WriteLine();
-                Console.WriteLine("Directories:");
-                foreach (DirectoryData data in crawler.Directories)
+                foreach (FileData data in crawler.Files)
                 {
-                    Console.WriteLine(String.Format(@"{0} {1} {2:N1} MB", data.Path, data.FileCount, data.TotalSize.GetMB()));
+                    Console.WriteLine(@"{0} {1} {2:N1} KB", data.Path, data.Extension, data.KB);
+                }
+                Console.WriteLine();
+
+                if (AppSettings.ReportDirectories)
+                {
+                    Console.WriteLine("Directories:");
+                    foreach (DirectoryData data in crawler.Directories)
+                    {
+                        Console.WriteLine(@"{0} {1} {2:N1} MB", data.Path, data.FileCount, data.TotalSize.GetMB());
+                    }
+                    Console.WriteLine();
                 }
             }
 
             if (crawler.InaccessibleFiles.Count > 0)
             {
-                Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Inaccessible Files:");
                 foreach (string path in crawler.InaccessibleFiles)
                 {
-                    Console.WriteLine(String.Format(@"{0}", path));
+                    Console.WriteLine(@"{0}", path);
                 }
+                Console.WriteLine();
             }
 
             if (crawler.InaccessibleDirectories.Count > 0)
             {
-                Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Inaccessible Directories:");
                 foreach (string path in crawler.InaccessibleDirectories)
                 {
-                    Console.WriteLine(String.Format(@"{0}", path));
+                    Console.WriteLine(@"{0}", path);
                 }
+                Console.WriteLine();
             }
 
-            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Crawl Complete: discovered {0} files in {1}h {2}m {3}.{4:N2}s ({5:N2} MB).", crawler.FileCount, crawler.CrawlTime.Value.Hours, crawler.CrawlTime.Value.Minutes, crawler.CrawlTime.Value.Seconds, crawler.CrawlTime.Value.Milliseconds, crawler.TotalSizeMB);
+            Console.WriteLine("Crawl Complete: discovered {0} files in {1} directories.", crawler.FileCount, crawler.DirectoryCount + 1);
+            if (crawler.CrawlTime != null)
+                Console.WriteLine("Crawl Time: {0}h {1}m {2}.{3}s ({4:N2} MB).", crawler.CrawlTime.Value.Hours, crawler.CrawlTime.Value.Minutes, crawler.CrawlTime.Value.Seconds, crawler.CrawlTime.Value.Milliseconds, crawler.TotalSizeMB);
+
+            Console.WriteLine("{0} containers found with {1} files contained ({2:N2} MB)", crawler.Files.Count(f => f.IsCompressedContainer), crawler.Files.Count(f => f.IsContained), crawler.Files.Where(f => f.IsCompressedContainer).Sum(f => f.MB));
+            Console.WriteLine();
 
             Console.ResetColor();
 

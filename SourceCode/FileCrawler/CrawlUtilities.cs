@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -120,6 +121,19 @@ namespace FileCrawler
         {
             string extension = data.Extension.Replace(".", "");
             return AppSettings.Compressed_Extensions.Any(ext => ext.EqualsIgnoreCase(extension));
+        }
+
+        public static bool IsDirectory(this string path)
+        {
+            FileAttributes attr = File.GetAttributes(path);
+            return (attr & FileAttributes.Directory) == FileAttributes.Directory;
+        }
+
+        public static string GetFullPath(FileInfo src)
+        {
+            return (string)src.GetType()
+                .GetField("FullPath", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(src);
         }
 
         #endregion

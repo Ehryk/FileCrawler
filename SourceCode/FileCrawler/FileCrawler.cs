@@ -157,16 +157,26 @@ namespace FileCrawler
                 if (OnCrawlStart != null)
                     OnCrawlStart(this, EventArgs.Empty);
 
-                RootDirectory = new DirectoryData(path);
-                ProcessDirectory(RootDirectory, ref retCode, type);
-                success = true;
+                if (path.IsDirectory())
+                {
+                    DirectoryInfo rootInfo = new DirectoryInfo(path);
+                    RootDirectory = new DirectoryData(rootInfo);
+                    ProcessDirectory(RootDirectory, ref retCode, type);
+                }
+                else
+                {
+                    FileInfo rootInfo = new FileInfo(path);
+                    FileData file = new FileData(rootInfo);
+                    ProcessFile(file);
+                }
+                success = retCode == 0;
             }
             catch (Exception ex)
             {
                 if (OnCrawlError != null)
                     OnCrawlError(this, new ErrorEventArgs(ex));
 
-                Logger.LogError(ex, "Could not process root directory {0}", RootDirectory.Path);
+                Logger.LogError(ex, "Could not process {0}", path);
             }
             finally
             {
@@ -237,6 +247,12 @@ namespace FileCrawler
                     FileData data = new FileData(info);
                     ProcessFile(data, ref pDirectory);
                     processed++;
+                }
+                catch (PathTooLongException ex)
+                {
+                    string fileName = CrawlUtilities.GetFullPath(info);
+                    Logger.LogWarning(ex, "Path too Long: {0}", fileName);
+                    inaccessibleFiles.Add(fileName);
                 }
                 catch (Exception ex)
                 {
@@ -309,6 +325,12 @@ namespace FileCrawler
                 OnDirectoryProcessed(this, new DirectoryDataEventArgs(pDirectory));
 
             return processed;
+        }
+
+        private bool ProcessFile(FileData data)
+        {
+            DirectoryData fake = new DirectoryData("file://");
+            return ProcessFile(data, ref fake);
         }
 
         private bool ProcessFile(FileData data, ref DirectoryData directory)

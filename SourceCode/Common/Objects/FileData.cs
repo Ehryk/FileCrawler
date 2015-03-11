@@ -51,6 +51,21 @@ namespace Common
 
         #region Constructors
 
+        public FileData(string path)
+        {
+            Path = path;
+
+            Root = System.IO.Path.GetPathRoot(Path);
+            //Are there other ways a non-UNC path can be non-local?
+            IsNetwork = new Uri(Path).IsUnc;
+            IsLocal = !IsNetwork;
+
+            Name = System.IO.Path.GetFileName(path);
+            Extension = System.IO.Path.GetExtension(path);
+            Directory = System.IO.Path.GetDirectoryName(path);
+            ParentName = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(path));
+        }
+
         public FileData(FileInfo info)
         {
             if (!info.Exists)
