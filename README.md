@@ -1,4 +1,4 @@
-FileCrawler v1.0
+FileCrawler v1.1
 ================
 
 This Windows console application will enumerate the contents of a directory and can perform various tasks with the output, including displaying in the console window, loading into a database, saving into an .xml or .json file, and can be extended into more.
