@@ -2,7 +2,6 @@
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
-using Common;
 using Common.Events;
 using Common.Enums;
 using Common.Extensions;
@@ -29,15 +28,12 @@ namespace FileCrawler
         private int fileCount;
         private int directoryCount;
         private long totalSize;
-        private decimal totalSizeKB;
-        private decimal totalSizeMB;
-        private decimal totalSizeGB;
 
         #endregion
 
         #region Public Properties
 
-        private DirectoryData RootDirectory;
+        private DirectoryData rootDirectory;
 
         public bool CrawlComplete
         {
@@ -97,17 +93,17 @@ namespace FileCrawler
 
         public decimal TotalSizeKB
         {
-            get { return totalSizeKB; }
+            get { return totalSize.GetKB(); }
         }
 
         public decimal TotalSizeMB
         {
-            get { return totalSizeMB; }
+            get { return totalSize.GetMB(); }
         }
 
         public decimal TotalSizeGB
         {
-            get { return totalSizeGB; }
+            get { return totalSize.GetGB(); }
         }
 
         #endregion
@@ -158,8 +154,8 @@ namespace FileCrawler
                 if (path.IsDirectory())
                 {
                     DirectoryInfo rootInfo = new DirectoryInfo(path);
-                    RootDirectory = new DirectoryData(rootInfo);
-                    ProcessDirectory(RootDirectory, ref retCode, type);
+                    rootDirectory = new DirectoryData(rootInfo);
+                    ProcessDirectory(rootDirectory, ref retCode, type);
                 }
                 else
                 {
@@ -187,34 +183,34 @@ namespace FileCrawler
             return success;
         }
 
-        public bool AttachDataAccess(IOutput pDataAccess)
+        public bool AttachOutput(IOutput pOutput)
         {
             try
             {
-                if (pDataAccess.UsesCrawlStart())
-                    this.OnCrawlStart += pDataAccess.CrawlStart;
-                if (pDataAccess.UsesDirectoryFound())
-                    this.OnDirectoryFound += pDataAccess.DirectoryFound;
-                if (pDataAccess.UsesFileFound())
-                    this.OnFileFound += pDataAccess.FileFound;
-                if (pDataAccess.UsesFileProcessed())
-                    this.OnFileProcessed += pDataAccess.FileProcessed;
-                if (pDataAccess.UsesDirectoryProcessed())
-                    this.OnDirectoryProcessed += pDataAccess.DirectoryProcessed;
-                if (pDataAccess.UsesCrawlError())
-                    this.OnCrawlError += pDataAccess.CrawlError;
-                if (pDataAccess.UsesFileInaccessible())
-                    this.OnFileInaccessible += pDataAccess.FileInaccessible;
-                if (pDataAccess.UsesDirectoryInaccessible())
-                    this.OnDirectoryInaccessible += pDataAccess.DirectoryInaccessible;
-                if (pDataAccess.UsesCrawlEnd())
-                    this.OnCrawlEnd += pDataAccess.CrawlEnd;
+                if (pOutput.UsesCrawlStart())
+                    this.OnCrawlStart += pOutput.CrawlStart;
+                if (pOutput.UsesDirectoryFound())
+                    this.OnDirectoryFound += pOutput.DirectoryFound;
+                if (pOutput.UsesFileFound())
+                    this.OnFileFound += pOutput.FileFound;
+                if (pOutput.UsesFileProcessed())
+                    this.OnFileProcessed += pOutput.FileProcessed;
+                if (pOutput.UsesDirectoryProcessed())
+                    this.OnDirectoryProcessed += pOutput.DirectoryProcessed;
+                if (pOutput.UsesCrawlError())
+                    this.OnCrawlError += pOutput.CrawlError;
+                if (pOutput.UsesFileInaccessible())
+                    this.OnFileInaccessible += pOutput.FileInaccessible;
+                if (pOutput.UsesDirectoryInaccessible())
+                    this.OnDirectoryInaccessible += pOutput.DirectoryInaccessible;
+                if (pOutput.UsesCrawlEnd())
+                    this.OnCrawlEnd += pOutput.CrawlEnd;
 
                 return true;
             }
             catch (Exception ex)
             {
-                Logger.LogWarning(ex, "DataAccess {0} Attachment failed", pDataAccess.Name());
+                Logger.LogWarning(ex, "DataAccess {0} Attachment failed", pOutput.Name());
                 return false;
             }
         }
@@ -391,19 +387,9 @@ namespace FileCrawler
             files.Add(pFile);
             fileCount++;
             totalSize += pFile.Size;
-            UpdateSizes();
 
             if (OnFileProcessed != null)
                 OnFileProcessed(this, new FileDataEventArgs(pFile, pParent));
-
-            return true;
-        }
-
-        private bool UpdateSizes()
-        {
-            totalSizeKB = totalSize.GetKB();
-            totalSizeMB = totalSize.GetMB();
-            totalSizeGB = totalSize.GetGB();
 
             return true;
         }

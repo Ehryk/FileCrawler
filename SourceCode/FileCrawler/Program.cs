@@ -49,52 +49,13 @@ namespace FileCrawler
             Console.Write("Crawling {0}... ", args[0]);
 
             FileCrawler crawler = new FileCrawler(args[0], type);
-            //crawler.AttachDataAccess(new DataAccess.Test());
+            crawler.AttachOutput(new Output.Console());
             crawler.StartCrawl();
 
             Console.WriteLine("Done.");
             Console.WriteLine();
 
-            if (!AppSettings.Quiet)
-            {
-                foreach (FileData data in crawler.Files)
-                {
-                    Console.WriteLine(@"{0} {1} {2:N1} KB", data.Path, data.Extension, data.KB);
-                }
-                Console.WriteLine();
-
-                if (AppSettings.ReportDirectories)
-                {
-                    Console.WriteLine("Directories:");
-                    foreach (DirectoryData data in crawler.Directories)
-                    {
-                        Console.WriteLine(@"{0} {1} {2:N1} MB", data.Path, data.FileCount, data.TotalSize.GetMB());
-                    }
-                    Console.WriteLine();
-                }
-            }
-
-            if (crawler.InaccessibleFiles.Count > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Inaccessible Files:");
-                foreach (string path in crawler.InaccessibleFiles)
-                {
-                    Console.WriteLine(@"{0}", path);
-                }
-                Console.WriteLine();
-            }
-
-            if (crawler.InaccessibleDirectories.Count > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Inaccessible Directories:");
-                foreach (string path in crawler.InaccessibleDirectories)
-                {
-                    Console.WriteLine(@"{0}", path);
-                }
-                Console.WriteLine();
-            }
+            //WriteConsoleOutput(crawler);
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Crawl Complete: discovered {0} files in {1} directories.", crawler.FileCount, crawler.DirectoryCount + 1);
@@ -178,6 +139,50 @@ namespace FileCrawler
             }
 
             return info.FullName;
+        }
+
+        private static void WriteConsoleOutput(FileCrawler crawler)
+        {
+            if (!AppSettings.Quiet)
+            {
+                foreach (FileData data in crawler.Files)
+                {
+                    Console.WriteLine(@"{0} {1} {2:N1} KB", data.Path, data.Extension, data.KB);
+                }
+                Console.WriteLine();
+
+                if (AppSettings.ReportDirectories)
+                {
+                    Console.WriteLine("Directories:");
+                    foreach (DirectoryData data in crawler.Directories)
+                    {
+                        Console.WriteLine(@"{0} {1} {2:N1} MB", data.Path, data.FileCount, data.TotalSize.GetMB());
+                    }
+                    Console.WriteLine();
+                }
+            }
+
+            if (crawler.InaccessibleFiles.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Inaccessible Files:");
+                foreach (string path in crawler.InaccessibleFiles)
+                {
+                    Console.WriteLine(@"{0}", path);
+                }
+                Console.WriteLine();
+            }
+
+            if (crawler.InaccessibleDirectories.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Inaccessible Directories:");
+                foreach (string path in crawler.InaccessibleDirectories)
+                {
+                    Console.WriteLine(@"{0}", path);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

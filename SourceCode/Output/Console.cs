@@ -13,6 +13,7 @@ namespace Output
         public bool ReportStartEnd = true;
         public bool ReportDirectories = true;
         public bool ReportInaccessible = true;
+        public bool ReportFiles = true;
 
         public ConsoleColor SummaryColor = ConsoleColor.Cyan;
         public ConsoleColor DirectoryColor = ConsoleColor.Cyan;
@@ -28,7 +29,7 @@ namespace Output
         public bool UsesCrawlStart() { return ReportStartEnd; }
         public bool UsesDirectoryFound() { return ReportDirectories; }
         public bool UsesFileFound() { return false; }
-        public bool UsesFileProcessed() { return true; }
+        public bool UsesFileProcessed() { return ReportFiles; }
         public bool UsesDirectoryProcessed() { return ReportDirectories; }
         public bool UsesCrawlError() { return true; }
         public bool UsesFileInaccessible() { return ReportInaccessible; }
@@ -43,7 +44,10 @@ namespace Output
 
         public void DirectoryFound(object sender, DirectoryDataEventArgs e)
         {
-            WriteLine(DirectoryColor, "Processing Directory {0}...", e.DirectoryData.Path);
+            if (ReportFiles)
+                WriteLine(DirectoryColor, "Processing Directory {0}...", e.DirectoryData.Path);
+            else
+                Write(DirectoryColor, "Processing Directory {0}... ", e.DirectoryData.Path);
         }
 
         public void FileFound(object sender, FileDataEventArgs e)
@@ -57,7 +61,10 @@ namespace Output
 
         public void DirectoryProcessed(object sender, DirectoryDataEventArgs e)
         {
-            WriteLine(DirectoryColor, "Processed Directory {0} ({1} files, {2:N2} MB)", e.DirectoryData.Path, e.DirectoryData.FileCount, e.DirectoryData.TotalSize.GetMB());
+            if (ReportFiles)
+                WriteLine(DirectoryColor, "Processed Directory {0} ({1} files, {2:N2} MB)", e.DirectoryData.Path, e.DirectoryData.FileCount, e.DirectoryData.TotalSize.GetMB());
+            else
+                WriteLine(DirectoryColor, "Done. ({0} files, {1:N2} MB)", e.DirectoryData.FileCount, e.DirectoryData.TotalSize.GetMB());
         }
 
         public void CrawlError(object sender, ErrorEventArgs e)
