@@ -8,16 +8,16 @@ namespace Common.Objects
     /// </summary>
     public class OperationResult
     {
-        private Guid _guid;
-        private Hashtable _results = new Hashtable(StringComparer.OrdinalIgnoreCase);
-        private Exception _exception;
-        private TimeSpan _elapsedTime;
-        private DateTime _start;
-        private DateTime _end;
+        private Guid guid;
+        private Hashtable results = new Hashtable(StringComparer.OrdinalIgnoreCase);
+        private Exception exception;
+        private TimeSpan elapsedTime;
+        private DateTime start;
+        private DateTime end;
 
         public OperationResult()
         {
-            _guid = Guid.NewGuid();
+            guid = Guid.NewGuid();
         }
 
         public virtual string GetDebugMessage()
@@ -29,66 +29,66 @@ namespace Common.Objects
         {
             get
             {
-                if (_results.ContainsKey(_guid.ToString()))
+                if (results.ContainsKey(guid.ToString()))
                 {
-                    return GetResult(_guid.ToString());
+                    return GetResult(guid.ToString());
                 }
                 return null;
             }
             set
             {
-                UpdateResult(_guid.ToString(), value);
+                UpdateResult(guid.ToString(), value);
             }
         }
 
         public void UpdateResult(string key, object value)
         {
-            if (_results.ContainsKey(key) == false)
+            if (results.ContainsKey(key) == false)
             {
-                _results.Add(key, value);
+                results.Add(key, value);
             }
             else
             {
-                _results[key] = value;
+                results[key] = value;
             }
         }
         public void AddResult(string key, object value)
         {
-            if (_results.ContainsKey(key) == false)
+            if (results.ContainsKey(key) == false)
             {
-                _results.Add(key, value);
+                results.Add(key, value);
             }
         }
         public object GetResult(string key)
         {
-            if (_results.ContainsKey(key))
+            if (results.ContainsKey(key))
             {
-                return _results[key];
+                return results[key];
             }
             return null;
         }
 
         public void AddException(Exception ex)
         {
-            _exception = ex;
+            exception = ex;
         }
 
         public void Start()
         {
-            _start = DateTime.Now;
+            start = DateTime.Now;
         }
 
         public void End()
         {
-            _end = DateTime.Now;
-            _elapsedTime = (TimeSpan)(_end - _start);
+            end = DateTime.Now;
+            elapsedTime = end - start;
         }
 
         public bool IsValid
         {
             get
             {
-                return _exception == null;
+                return exception == null;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Common.Objects
         {
             get
             {
-                return _exception;
+                return exception;
             }
         }
 
@@ -104,7 +104,7 @@ namespace Common.Objects
         {
             get
             {
-                return _elapsedTime;
+                return elapsedTime;
             }
         }
     }

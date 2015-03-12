@@ -34,7 +34,8 @@ namespace FileCrawler
                 string sevenZipLocation;
                 if (AppSettings.Compressed_PathTo7zDLL == null)
                 {
-                    sevenZipLocation = Path.Combine(Path.GetDirectoryName(AssemblyInfo.Path), "7z.dll");
+
+                    sevenZipLocation = Path.Combine(Path.GetDirectoryName(AssemblyInfo.Path) ?? "", "7z.dll");
                     Create7zDLL(sevenZipLocation);
                 }
                 else
@@ -55,7 +56,7 @@ namespace FileCrawler
 
             FileCrawler crawler = new FileCrawler(FileExtensions.FixPath(args[0]), type);
             crawler.AttachOutput(new Output.Console(!AppSettings.Quiet));
-            crawler.StartCrawl();
+            crawler.CrawlSync();
 
             //WriteConsoleOutput(crawler);
 
@@ -95,12 +96,7 @@ namespace FileCrawler
         {
             try
             {
-                if (Environment.Is64BitOperatingSystem)
-                {
-                    ExtractEmbeddedResource("7z-x64.dll", destination, true);
-                }
-                else
-                    ExtractEmbeddedResource("7z-x86.dll", destination, true);
+                ExtractEmbeddedResource(Environment.Is64BitOperatingSystem ? "7z-x64.dll" : "7z-x86.dll", destination, true);
 
                 return true;
             }
@@ -113,6 +109,8 @@ namespace FileCrawler
 
         private static string ExtractEmbeddedResource(string resourceName, string destination = null, bool overwrite = false)
         {
+            destination = destination ?? resourceName;
+
             FileInfo info = new FileInfo(destination);
             if (info.Exists)
             {

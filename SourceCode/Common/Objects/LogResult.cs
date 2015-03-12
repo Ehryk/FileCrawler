@@ -4,12 +4,11 @@ namespace Common.Objects
 {
     public class LogResult : OperationResult
     {
-        private bool _hasError = false;
-        private string _errorMessage = string.Empty;
-        private string _stackTrace = string.Empty;
-        private string _operation = string.Empty;
-        private Exception _ex = null;
-		private string _simpleResult = string.Empty;
+        private string errorMessage = String.Empty;
+        private string stackTrace = String.Empty;
+        private string operation = String.Empty;
+        private Exception ex;
+        private string simpleResult = String.Empty;
 
 		public LogResult()
 		{
@@ -25,35 +24,25 @@ namespace Common.Objects
         {
             get
             {
-                return _simpleResult;
+                return simpleResult;
             }
             set
             {
-                _simpleResult = value;
+                simpleResult = value;
             }
         }
 
-        public bool HasError
-        {
-            get
-            {
-                return _hasError;
-            }
-            set
-            {
-                _hasError = value;
-            }
-        }
+        public bool HasError { get; set; }
 
         public string ErrorMessage
         {
             get
             {
-                return _errorMessage;
+                return errorMessage;
             }
             set
             {
-                _errorMessage = value;
+                errorMessage = value;
             }
         }
 
@@ -61,11 +50,11 @@ namespace Common.Objects
         {
             get
             {
-                return _stackTrace;
+                return stackTrace;
             }
             set
             {
-                _stackTrace = value;
+                stackTrace = value;
             }
         }
 
@@ -73,11 +62,11 @@ namespace Common.Objects
         {
             get
             {
-                return _operation;
+                return operation;
             }
             set
             {
-                _operation = value;
+                operation = value;
             }
         }
 
@@ -85,7 +74,7 @@ namespace Common.Objects
         {
             get
             {
-                return _ex;
+                return ex;
             }
         }
 
@@ -93,7 +82,7 @@ namespace Common.Objects
         {
             message = (message != null) ? String.Format("{0}: {1}", message, ex.Message) : ex.Message;
 
-            this._ex = ex;
+            this.ex = ex;
             HasError = true;
             ErrorMessage = message;
             StackTrace = ex.StackTrace;

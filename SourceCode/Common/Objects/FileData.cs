@@ -132,7 +132,7 @@ namespace Common.Objects
             Size = (long)info.Size;
 
             //How can FileAttributes be retrived from uint?
-            FileAttributes Attributes = (FileAttributes)info.Attributes;
+            Attributes = (FileAttributes)info.Attributes;
 
             try
             {

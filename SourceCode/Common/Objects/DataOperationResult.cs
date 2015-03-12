@@ -11,49 +11,43 @@ namespace Common.Objects
     /// </summary>
     public class DataOperationResult : OperationResult
     {
-        private string _sql;
         private string _connection;
 
-        private int _rows;
         private Hashtable _resultParams = new Hashtable();
         private Hashtable _information = new Hashtable();
         private Dictionary<string, string> _inputParams = new Dictionary<string, string>();
 
-        public DataOperationResult() : base()
+        public DataOperationResult()
         {
-            _rows = -1;
+            Rows = -1;
         }
 
-        public DataOperationResult(string connection) : base()
+        public DataOperationResult(string connection)
         {
-            _rows = -1;
+            Rows = -1;
             _connection = connection;
         }
 
-        public DataOperationResult(string connection, string sql) : base()
+        public DataOperationResult(string connection, string sql)
         {
-            _rows = -1;
+            Rows = -1;
             _connection = connection;
-            _sql = sql;
+            Sql = sql;
         }
 
         public override string GetDebugMessage()
         {
-            string debug = "";
-
             StringBuilder sb = new StringBuilder();
             foreach (string key in InputParams.Keys)
             {
                 if (sb.Length > 0)
-                {
-                    sb.AppendFormat(",", key, InputParams[key]);
-                }
+                    sb.Append(",");
                 sb.AppendFormat("{0}:{1}", key, InputParams[key]);
             }
 
             string result = (IsValid) ? "Success" : "Failure";
 
-            debug = string.Format("SQL:{0} Params:{1} Result:{2}", Sql, sb.ToString(), result);
+            string debug = string.Format("SQL:{0} Params:{1} Result:{2}", Sql, sb, result);
 
             return debug;
         }
@@ -79,29 +73,9 @@ namespace Common.Objects
             }
         }
 
-        public string Sql
-        {
-            get
-            {
-                return _sql;
-            }
-            set
-            {
-                _sql = value;
-            }
-        }
+        public string Sql { get; set; }
 
-        public int Rows
-        {
-            get
-            {
-                return _rows;
-            }
-            set
-            {
-                _rows = value;
-            }
-        }
+        public int Rows { get; set; }
 
         public void AddInfo(string key, object value)
         {
@@ -143,14 +117,9 @@ namespace Common.Objects
 
         public DataTable GetDataTable(int tableIndex)
         {
-          if (DataSetResult != null && DataSetResult.Tables.Count > tableIndex)
-          {
-            return DataSetResult.Tables[tableIndex];
-          }
-          else
-          {
+            if (DataSetResult != null && DataSetResult.Tables.Count > tableIndex)
+                return DataSetResult.Tables[tableIndex];
             return null;
-          }
         }
 
         public string GetColumnResult(int table, int row, string column)

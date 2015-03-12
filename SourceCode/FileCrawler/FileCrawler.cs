@@ -15,7 +15,7 @@ namespace FileCrawler
     {
         #region Private Properties
 
-        private bool crawlComplete = false;
+        private bool crawlComplete;
         private Stopwatch stopwatch = new Stopwatch();
 
         private string path;
@@ -46,8 +46,8 @@ namespace FileCrawler
             {
                 if (crawlComplete)
                     return stopwatch.Elapsed;
-                else
-                    return null;
+                
+                return null;
             }
         }
 
@@ -141,7 +141,7 @@ namespace FileCrawler
 
         #region Public Methods
 
-        public bool StartCrawl()
+        public int CrawlSync()
         {
             bool success = false;
             stopwatch.Start();
@@ -181,7 +181,7 @@ namespace FileCrawler
 
             stopwatch.Stop();
             crawlComplete = true;
-            return success;
+            return retCode;
         }
 
         public bool AttachOutput(IOutput pOutput)
@@ -189,23 +189,23 @@ namespace FileCrawler
             try
             {
                 if (pOutput.UsesCrawlStart())
-                    this.OnCrawlStart += pOutput.CrawlStart;
+                    OnCrawlStart += pOutput.CrawlStart;
                 if (pOutput.UsesDirectoryFound())
-                    this.OnDirectoryFound += pOutput.DirectoryFound;
+                    OnDirectoryFound += pOutput.DirectoryFound;
                 if (pOutput.UsesFileFound())
-                    this.OnFileFound += pOutput.FileFound;
+                    OnFileFound += pOutput.FileFound;
                 if (pOutput.UsesFileProcessed())
-                    this.OnFileProcessed += pOutput.FileProcessed;
+                    OnFileProcessed += pOutput.FileProcessed;
                 if (pOutput.UsesDirectoryProcessed())
-                    this.OnDirectoryProcessed += pOutput.DirectoryProcessed;
+                    OnDirectoryProcessed += pOutput.DirectoryProcessed;
                 if (pOutput.UsesCrawlError())
-                    this.OnCrawlError += pOutput.CrawlError;
+                    OnCrawlError += pOutput.CrawlError;
                 if (pOutput.UsesFileInaccessible())
-                    this.OnFileInaccessible += pOutput.FileInaccessible;
+                    OnFileInaccessible += pOutput.FileInaccessible;
                 if (pOutput.UsesDirectoryInaccessible())
-                    this.OnDirectoryInaccessible += pOutput.DirectoryInaccessible;
+                    OnDirectoryInaccessible += pOutput.DirectoryInaccessible;
                 if (pOutput.UsesCrawlEnd())
-                    this.OnCrawlEnd += pOutput.CrawlEnd;
+                    OnCrawlEnd += pOutput.CrawlEnd;
 
                 return true;
             }
