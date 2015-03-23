@@ -40,9 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Console.cs" />
-    <Compile Include="Individual.cs" />
+    <Compile Include="SQLServer_Individual.cs" />
     <Compile Include="Null.cs" />
-    <Compile Include="Bulk.cs" />
+    <Compile Include="SQLServer_TVP.cs" />
+    <Compile Include="SQLServer_XML.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

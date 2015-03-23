@@ -34,5 +34,7 @@ namespace Common.Interfaces
 
         bool UsesCrawlEnd();
         void CrawlEnd(object sender, EventArgs e);
+
+        bool AttachToCrawler(ICrawler crawler);
     }
 }

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Output
 {
-    public class Bulk : IOutput
+    public class SQLServer_Individual : IOutput
     {
         #region Properties
 
@@ -19,15 +19,15 @@ namespace Output
         public bool UsesDirectoryFound() { return false; }
         public bool UsesFileFound() { return false; }
         public bool UsesFileProcessed() { return true; }
-        public bool UsesDirectoryProcessed() { return true; }
-        public bool UsesCrawlError() { return false; }
+        public bool UsesDirectoryProcessed() { return false; }
+        public bool UsesCrawlError() { return true; }
         public bool UsesFileInaccessible() { return false; }
         public bool UsesDirectoryInaccessible() { return false; }
         public bool UsesCrawlEnd() { return true; }
 
         public void CrawlStart(object sender, EventArgs e)
         {
-            //Clear Loading
+            Common.Logging.Logger.LogDebug("DataAccess Test: Crawl Started.");
         }
 
         public void DirectoryFound(object sender, DirectoryDataEventArgs e)
@@ -40,19 +40,16 @@ namespace Output
 
         public void FileProcessed(object sender, FileDataEventArgs e)
         {
-            if (e.FileData.IsCompressedContainer)
-            {
-                //Insert Container's Files
-            }
+            //Insert File
         }
 
         public void DirectoryProcessed(object sender, DirectoryDataEventArgs e)
         {
-            //Insert Directory's Files
         }
 
         public void CrawlError(object sender, ErrorEventArgs e)
         {
+            Common.Logging.Logger.LogError(e.GetException(), "DataAccess Test: Error");
         }
 
         public void FileInaccessible(object sender, InaccessibleEventArgs e)
@@ -65,7 +62,7 @@ namespace Output
 
         public void CrawlEnd(object sender, EventArgs e)
         {
-            //Perform Diff
+            Common.Logging.Logger.LogDebug("DataAccess Test: Crawl Ended.");
         }
 
         #endregion

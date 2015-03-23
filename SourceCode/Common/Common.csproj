@@ -52,6 +52,7 @@
     <Compile Include="Events\DirectoryDataEventArgs.cs" />
     <Compile Include="Events\DirectoryDataEventHandler.cs" />
     <Compile Include="Events\FileDataEventHandler.cs" />
+    <Compile Include="Interfaces\ICrawler.cs" />
     <Compile Include="Objects\DataOperationResult.cs" />
     <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Extensions\AssemblyInfo.cs" />
